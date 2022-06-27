@@ -1,11 +1,13 @@
 <template>
   <table>
     <thead>
-      <td>Days</td>
-      <td>Earliest Expiration</td>
       <td>Category</td>
+      <td>Earliest Expiration</td>
+      <td>Days</td>
     </thead>
     <tbody>
+      <DateComponent :days="0" msg="today"/>
+      <DateComponent :days="1" msg="Doughnuts" />
       <DateComponent :days="2" msg="Deli, Bakery bread" />
       <DateComponent :days="3" msg="meat and sea food, produce" />
       <DateComponent :days="5" msg="Commercial bread" />

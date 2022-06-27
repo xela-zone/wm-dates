@@ -1,13 +1,13 @@
 <template>
   <tr>
     <td>
-      {{ days }}
+      {{ msg }}
     </td>
     <td>
       {{ expiration }}
     </td>
     <td>
-      {{ msg }}
+      {{ days }}
     </td>
   </tr>
 </template>
