@@ -15,6 +15,14 @@
       <DateComponent :days="30" msg="Frozen, Pharmacy, Dry Grocery" />
     </tbody>
   </table>
+  <br>
+  <br>
+  <center>
+    <picture>
+      <source srcset="dark-qrcode.png" media="(prefers-color-scheme:dark)">
+    <img src="light-qrcode.png">
+  </picture>
+  </center>
 </template>
 
 <script>
