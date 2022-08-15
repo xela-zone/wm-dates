@@ -23,6 +23,7 @@
     <img src="light-qrcode.png">
   </picture>
   </center>
+  
 </template>
 
 <script>
