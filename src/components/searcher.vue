@@ -39,7 +39,12 @@ export default {
     computed: {
         FilteredPlus() {
             // take the dictionary plus and filter based on this.search.toLowerCase()
-            return Object.keys(this.plus).filter(key => this.plus[key].toLowerCase().includes(this.search.toLowerCase()))
+            let searchResults = Object.keys(this.plus).filter(key => this.plus[key].toLowerCase().includes(this.search.toLowerCase()))
+            // if the search is numbers only, then search keys for matches aswell
+            if (this.search.match(/^[0-9]+$/)) {
+                searchResults = searchResults.concat(Object.keys(this.plus).filter(key => key.toLowerCase().includes(this.search.toLowerCase())))
+            }
+            return searchResults
 
         },
     },
