@@ -18,7 +18,8 @@
                 </tr>
             </tbody>
         </table>
-        <input type="text" v-model="search" placeholder="Search for a PLU Here...">
+        <input type="search" :value="search" @input="e => search = e.target.value" placeholder="Search for a PLU Here...">
+        <!--  :value and @input from https://github.com/vuejs/vue/issues/8231#issuecomment-547391171 -->
     </div>
 
 </template>
