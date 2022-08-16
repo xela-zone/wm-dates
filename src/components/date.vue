@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: "HelloWorld",
+  name: "DateComponent",
   props: {
     msg: String,
     days: Number,

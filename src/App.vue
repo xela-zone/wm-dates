@@ -23,16 +23,17 @@
     <img src="light-qrcode.png">
   </picture>
   </center>
-  
+  <Searcher/>
 </template>
 
 <script>
 import DateComponent from "./components/date.vue";
-
+import Searcher from "./components/searcher.vue";
 export default {
   name: "App",
   components: {
     DateComponent,
+    Searcher
   },
 };
 </script>
