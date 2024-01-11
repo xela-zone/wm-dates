@@ -1,7 +1,7 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
-  publicPath: "/wm-date/",
+  publicPath: "",
   pwa: {
     workboxOptions: {
       skipWaiting: true
@@ -10,6 +10,6 @@ module.exports = defineConfig({
     themeColor: "#00bcd4",
     shortName: "Pickable Dates",
     display: "standalone",
-    start_url: "/wm-date/",
+    start_url: "",
   }
 })
