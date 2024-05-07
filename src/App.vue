@@ -17,6 +17,7 @@
     </tbody>
   </table>
   <br>
+  <Searcher/>
   <br>
   <center>
     <picture>
@@ -24,7 +25,6 @@
     <img src="light-qrcode.png">
   </picture>
   </center>
-  <Searcher/>
 </template>
 
 <script>
