@@ -38,8 +38,12 @@ export default {
     },
     computed: {
         FilteredPlus() {
+            let searchResults = Object.keys(this.plus);
+
             // take the dictionary plus and filter based on this.search.toLowerCase()
-            let searchResults = Object.keys(this.plus).filter(key => this.plus[key].toLowerCase().includes(this.search.toLowerCase()))
+            this.search.toLowerCase().split(' ').forEach(term => {
+                searchResults = searchResults.filter(key => this.plus[key].toLowerCase().includes(term))
+            });
             // if the search is numbers only, then search keys for matches aswell
             if (this.search.match(/^[0-9]+$/)) {
                 searchResults = searchResults.concat(Object.keys(this.plus).filter(key => key.toLowerCase().includes(this.search.toLowerCase())))
