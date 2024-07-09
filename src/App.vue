@@ -20,10 +20,8 @@
   <Searcher/>
   <br>
   <center>
-    <picture>
-      <source srcset="dark-qrcode.png" media="(prefers-color-scheme:dark)">
-    <img src="light-qrcode.png">
-  </picture>
+    <qrcode-vue :background="perfersDark ? '#202b38' : '#fff'" :foreground="perfersDark ? 'white' : '#363636'" :value="windowLocation" :margin="2" :size="350"></qrcode-vue>
+
   </center>
 </template>
 
@@ -31,12 +29,31 @@
 import DateComponent from "./components/date.vue";
 import Searcher from "./components/searcher.vue";
 import JulianComponent from "./components/julian-date.vue";
+
+import QrcodeVue from 'qrcode.vue'
+
 export default {
   name: "App",
   components: {
     DateComponent,
     Searcher,
     JulianComponent,
+    QrcodeVue
   },
+  data() {
+    return {
+      windowLocation: window.location.href,
+      perfersDark: true
+    }
+  },
+  mounted() {
+    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    this.perfersDark = prefersDarkScheme.matches;
+    prefersDarkScheme.addEventListener('change', (e) => {
+      this.perfersDark = e.matches;
+    });
+  }
+
+
 };
 </script>
