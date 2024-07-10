@@ -6,29 +6,39 @@
       <td>Days</td>
     </thead>
     <tbody>
-      <DateComponent :days="0" msg="today"/>
+      <DateComponent :days="0" msg="today" />
       <DateComponent :days="1" msg="Doughnuts" />
       <DateComponent :days="2" msg="Deli meat, fresh sea food, Bakery bread" />
       <DateComponent :days="3" msg="produce" />
       <DateComponent :days="5" msg="Commercial bread" />
       <DateComponent :days="7" msg="Dairy, 97 wall" />
       <DateComponent :days="30" msg="Frozen, Pharmacy, Dry Grocery" />
-      <JulianComponent/>
+      <JulianComponent />
     </tbody>
   </table>
   <br>
-  <Searcher/>
-  <br>
-  <center>
-    <qrcode-vue :background="perfersDark ? '#202b38' : '#fff'" :foreground="perfersDark ? 'white' : '#363636'" :value="windowLocation" :margin="2" :size="350"></qrcode-vue>
+  <div style="display: flex; justify-content: center;">
 
-  </center>
+    <vueBarcode :value="showenPlu" v-if="showenPlu"
+      :options="{ background: perfersDark ? '#202b38' : '#fff', lineColor: perfersDark ? 'white' : '#363636', width: 2, text: showenPlu, format: 'UPC' }" />
+    <p v-else>Click an Entry from search to generate a barcode for it!</p>
+  </div>
+  <Searcher @showBarcode="showBarcode" />
+  <br>
+  <div style="display: flex; justify-content: center;">
+    <qrcode-vue :background="perfersDark ? '#202b38' : '#fff'" :foreground="perfersDark ? 'white' : '#363636'"
+      :value="windowLocation" :margin="2" :size="350"></qrcode-vue>
+  </div>
+  <br>
+
 </template>
 
 <script>
 import DateComponent from "./components/date.vue";
 import Searcher from "./components/searcher.vue";
 import JulianComponent from "./components/julian-date.vue";
+
+import vueBarcode from '@chenfengyuan/vue-barcode';
 
 import QrcodeVue from 'qrcode.vue'
 
@@ -38,14 +48,17 @@ export default {
     DateComponent,
     Searcher,
     JulianComponent,
-    QrcodeVue
+    QrcodeVue,
+    vueBarcode
   },
   data() {
     return {
       windowLocation: window.location.href.split('#')[0],
-      perfersDark: true
+      perfersDark: true,
+      showenPlu: null,
     }
   },
+
   mounted() {
     const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
     this.perfersDark = prefersDarkScheme.matches;
@@ -73,7 +86,13 @@ export default {
         window.location.hash = ""
       }
     }, 5000)
+  },
+  methods: {
+    showBarcode(pluNumber) {
+      this.showenPlu = pluNumber.toString().padStart(11, '0')
+    }
   }
+
 
 
 };
