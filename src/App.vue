@@ -52,6 +52,27 @@ export default {
     prefersDarkScheme.addEventListener('change', (e) => {
       this.perfersDark = e.matches;
     });
+
+    if (window.location.hostname === "alext.duckdns.org") {
+      window.location = "https://alexfromalaska.xyz/wm-date/#forwarded=true"
+    }
+
+    setTimeout(() => {
+      if (window.location.hash.includes("forwarded=true")) {
+        //  send a http post req
+        fetch("https://ha.kbrt.xyz/api/webhook/-qVe9DvVGllrCRdwOfqEoaHRa", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: "Someone is using the old link",
+          })
+        })
+        alert("This page is being moved, please update your bookmarks / installed app to https://alexfromalaska.xyz/wm-date/\n\n Find Alex if you need help :)")
+        window.location.hash = ""
+      }
+    }, 10000)
   }
 
 
