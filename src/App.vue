@@ -42,7 +42,7 @@ export default {
   },
   data() {
     return {
-      windowLocation: window.location.href,
+      windowLocation: window.location.href.split('#')[0],
       perfersDark: true
     }
   },
