@@ -72,7 +72,7 @@ export default {
         alert("This page is being moved, please update your bookmarks / installed app to https://alexfromalaska.xyz/wm-date/\n\n Find Alex if you need help :)")
         window.location.hash = ""
       }
-    }, 10000)
+    }, 5000)
   }
 
 
