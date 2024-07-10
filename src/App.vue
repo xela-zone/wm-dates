@@ -1,4 +1,9 @@
 <template>
+  <p class="warning" v-if="host == 'alext.duckdns.org'">
+    this version of the site is going to be removed at some point.<br>please update your bookmarks to
+    <a href="https://alexfromalaska.xyz/wm-date">https://alexfromalaska.xyz/wm-date</a>.
+    see Alex @ OPD in 2074 for more information.
+  </p>
   <table>
     <thead>
       <td>Category</td>
@@ -20,13 +25,14 @@
   <div style="display: flex; justify-content: center;">
 
     <vueBarcode :value="showenPlu" v-if="showenPlu"
-      :options="{ background: perfersDark ? '#202b38' : '#fff', lineColor: perfersDark ? 'white' : '#363636', width: 2, text: showenPlu, format: 'UPC' }" />
+      :options="{ background: perfersDark ? '#202b38' : '#fff', lineColor: perfersDark ? '#dbdbdb' : '#363636', width: 2, text: showenPlu, format: 'UPC' }"
+      @click="() => { showenPlu = null }" />
     <p v-else>Click an Entry from search to generate a barcode for it!</p>
   </div>
   <Searcher @showBarcode="showBarcode" />
   <br>
   <div style="display: flex; justify-content: center;">
-    <qrcode-vue :background="perfersDark ? '#202b38' : '#fff'" :foreground="perfersDark ? 'white' : '#363636'"
+    <qrcode-vue :background="perfersDark ? '#202b38' : '#fff'" :foreground="perfersDark ? '#dbdbdb' : '#363636'"
       :value="windowLocation" :margin="2" :size="350"></qrcode-vue>
   </div>
   <br>
@@ -54,6 +60,7 @@ export default {
   data() {
     return {
       windowLocation: window.location.href.split('#')[0],
+      host: window.location.host,
       perfersDark: true,
       showenPlu: null,
     }
@@ -65,27 +72,6 @@ export default {
     prefersDarkScheme.addEventListener('change', (e) => {
       this.perfersDark = e.matches;
     });
-
-    if (window.location.hostname === "alext.duckdns.org") {
-      window.location = "https://alexfromalaska.xyz/wm-date/#forwarded=true"
-    }
-
-    setTimeout(() => {
-      if (window.location.hash.includes("forwarded=true")) {
-        //  send a http post req
-        fetch("https://ha.kbrt.xyz/api/webhook/-qVe9DvVGllrCRdwOfqEoaHRa", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            message: "Someone is using the old link",
-          })
-        })
-        alert("This page is being moved, please update your bookmarks / installed app to https://alexfromalaska.xyz/wm-date/\n\n Find Alex if you need help :)")
-        window.location.hash = ""
-      }
-    }, 5000)
   },
   methods: {
     showBarcode(pluNumber) {
@@ -97,3 +83,24 @@ export default {
 
 };
 </script>
+
+
+<style src="water.css">
+/* from npm ; water.css */
+</style>
+
+<style scoped>
+/* the above tailered for a light theme */
+.warning {
+  background: #A61208;
+  color: white;
+  padding: 1em;
+  margin: 1em;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.warning>a {
+  color: white
+}
+</style>
