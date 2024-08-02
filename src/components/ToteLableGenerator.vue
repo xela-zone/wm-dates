@@ -10,7 +10,7 @@
   </div>
 
   <qrcode-vue v-if="validTote" :background="perfersDark ? '#202b38' : '#fff'"
-    @click="() => { number = 0; this.$refs.numberInput.focus() }" :foreground="perfersDark ? '#dbdbdb' : '#363636'"
+    @click="() => { number = null; this.$refs.numberInput.focus() }" :foreground="perfersDark ? '#dbdbdb' : '#363636'"
     :value="toteNumber" :margin="2" :size="350"></qrcode-vue>
 
   <br>
