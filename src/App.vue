@@ -9,10 +9,12 @@
   <br>
   <ToteLableGenerator :perfersDark="perfersDark" />
   <br>
-  <div @click="e => { showQR = !showQR }" style="display: flex; justify-content: center;">
-    Share this webtool By Clicking Here
-  </div>
-  <div v-if="showQR" style="display: flex; justify-content: center;">
+  <h3>
+    <a @click="e => { showQR = !showQR }">
+      Share this webtool By Clicking Here
+    </a>
+  </h3>
+  <div v-if="showQR">
     <qrcode-vue :background="perfersDark ? '#202b38' : '#fff'" :foreground="perfersDark ? '#dbdbdb' : '#363636'"
       :value="windowLocation" :margin="2" :size="350"></qrcode-vue>
   </div>

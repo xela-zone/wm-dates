@@ -1,4 +1,5 @@
 <template>
+    <h2>Expiration Dates</h2>
     <table>
         <thead>
             <td>Category</td>

@@ -1,11 +1,10 @@
 <template>
 
-  <div style="display: flex; justify-content: center;">
 
-    <vueBarcode :value="showenPlu" v-if="showenPlu" :options="{ width: 2, text: showenPlu, format: 'UPC' }"
-      @click="() => { showenPlu = null }" />
-    <p v-else>Click an Entry from search to generate a barcode for it!</p>
-  </div>
+  <h2>Generate a PLU Barcode</h2>
+  <vueBarcode :value="showenPlu" v-if="showenPlu" :options="{ width: 2, text: showenPlu, format: 'UPC' }"
+    @click="() => { showenPlu = null }" />
+  <p v-else>Click an Entry from search to generate a barcode for it!</p>
   <Searcher @showBarcode="showBarcode" />
 
   <br>

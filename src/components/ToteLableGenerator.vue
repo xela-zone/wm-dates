@@ -1,8 +1,6 @@
 <template>
 
-  <div style="display: flex; justify-content: center;">
-
-  </div>
+  <h2>Generate a Tote Label</h2>
   <div style="display: flex;">
     <input maxlength=1 type="search" :value="letter" @input="letterHandler"
       placeholder="Set the Letter for the Tote...">
