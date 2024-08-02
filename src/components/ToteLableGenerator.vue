@@ -2,9 +2,10 @@
 
   <h2>Generate a Tote Label</h2>
   <div style="display: flex;">
-    <input maxlength=1 type="search" :value="letter" @input="letterHandler"
+    <input maxlength=1 type="search" :value="letter" @input="letterHandler" style="width: 2em;"
       placeholder="Set the Letter for the Tote...">
-    <input maxlength=5 ref="numberInput" type="number" :value="number" @input="e => number = e.target.value"
+    <input maxlength=5 ref="numberInput" type="number" inputmode="numeric" :value="number"
+      @input="e => { number = e.target.value; if (number.length === 5) { this.$refs.numberInput.blur() } }"
       placeholder="Set the Numbers for the Tote...">
   </div>
 
@@ -34,12 +35,12 @@ export default {
   data() {
     return {
       letter: '',
-      number: 0,
+      number: null,
     }
   },
   computed: {
     toteNumber() {
-      return this.letter + this.number.toString().padStart(4, '0')
+      return this.letter + this.number.toString().padStart(5, '0')
     },
     validTote() {
       return this.letter.length === 1 && this.number > 0
