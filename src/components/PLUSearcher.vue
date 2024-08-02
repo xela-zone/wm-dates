@@ -2,8 +2,7 @@
 
   <div style="display: flex; justify-content: center;">
 
-    <vueBarcode :value="showenPlu" v-if="showenPlu"
-      :options="{ background: '#dbdbdb', lineColor: '#202b38', width: 2, margin: 0, text: showenPlu, format: 'UPC' }"
+    <vueBarcode :value="showenPlu" v-if="showenPlu" :options="{ width: 2, text: showenPlu, format: 'UPC' }"
       @click="() => { showenPlu = null }" />
     <p v-else>Click an Entry from search to generate a barcode for it!</p>
   </div>
