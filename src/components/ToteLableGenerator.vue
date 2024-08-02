@@ -11,7 +11,8 @@
   </div>
 
   <qrcode-vue v-if="validTote" :background="perfersDark ? '#202b38' : '#fff'"
-    :foreground="perfersDark ? '#dbdbdb' : '#363636'" :value="toteNumber" :margin="2" :size="350"></qrcode-vue>
+    @click="() => { number = 0; this.$refs.numberInput.focus() }" :foreground="perfersDark ? '#dbdbdb' : '#363636'"
+    :value="toteNumber" :margin="2" :size="350"></qrcode-vue>
 
   <br>
 
