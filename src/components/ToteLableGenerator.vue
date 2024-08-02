@@ -23,13 +23,11 @@ import QrcodeVue from 'qrcode.vue'
 
 
 export default {
-  // eslint-disable-next-line vue/multi-word-component-names
   name: "ToteLabelGenerator",
   props: {
     perfersDark: Boolean,
   },
   components: {
-    // eslint-disable-next-line vue/no-unused-components
     QrcodeVue,
   },
   data() {
