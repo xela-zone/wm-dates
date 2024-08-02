@@ -4,34 +4,15 @@
     <a href="https://alexfromalaska.xyz/wm-date">https://alexfromalaska.xyz/wm-date</a>.
     see Alex @ OPD in 2074 for more information.
   </p>
-  <table>
-    <thead>
-      <td>Category</td>
-      <td>Earliest Expiration</td>
-      <td>Days</td>
-    </thead>
-    <tbody>
-      <DateComponent :days="0" msg="today" />
-      <DateComponent :days="1" msg="Doughnuts" />
-      <DateComponent :days="2" msg="Deli meat, fresh sea food, Bakery bread" />
-      <DateComponent :days="3" msg="produce" />
-      <DateComponent :days="5" msg="Commercial bread" />
-      <DateComponent :days="7" msg="Dairy, 97 wall" />
-      <DateComponent :days="30" msg="Frozen, Pharmacy, Dry Grocery" />
-      <JulianComponent />
-    </tbody>
-  </table>
+  <DateTable />
+  <PLUSearcher :perfersDark="perfersDark" />
   <br>
-  <div style="display: flex; justify-content: center;">
-
-    <vueBarcode :value="showenPlu" v-if="showenPlu"
-      :options="{ background: perfersDark ? '#202b38' : '#fff', lineColor: perfersDark ? '#dbdbdb' : '#363636', width: 2, text: showenPlu, format: 'UPC' }"
-      @click="() => { showenPlu = null }" />
-    <p v-else>Click an Entry from search to generate a barcode for it!</p>
+  <ToteLableGenerator :perfersDark="perfersDark" />
+  <br>
+  <div @click="e => { showQR = !showQR }" style="display: flex; justify-content: center;">
+    Share this webtool By Clicking Here
   </div>
-  <Searcher @showBarcode="showBarcode" />
-  <br>
-  <div style="display: flex; justify-content: center;">
+  <div v-if="showQR" style="display: flex; justify-content: center;">
     <qrcode-vue :background="perfersDark ? '#202b38' : '#fff'" :foreground="perfersDark ? '#dbdbdb' : '#363636'"
       :value="windowLocation" :margin="2" :size="350"></qrcode-vue>
   </div>
@@ -40,29 +21,28 @@
 </template>
 
 <script>
-import DateComponent from "./components/date.vue";
-import Searcher from "./components/searcher.vue";
-import JulianComponent from "./components/julian-date.vue";
 
-import vueBarcode from '@chenfengyuan/vue-barcode';
 
 import QrcodeVue from 'qrcode.vue'
+import DateTable from './components/DateTable.vue'
+import PLUSearcher from './components/PLUSearcher.vue'
+import ToteLableGenerator from "./components/ToteLableGenerator.vue";
 
 export default {
   name: "App",
   components: {
-    DateComponent,
-    Searcher,
-    JulianComponent,
     QrcodeVue,
-    vueBarcode
+    DateTable,
+    PLUSearcher,
+    ToteLableGenerator
+
   },
   data() {
     return {
       windowLocation: window.location.href.split('#')[0],
       host: window.location.host,
       perfersDark: true,
-      showenPlu: null,
+      showQR: false,
     }
   },
 
@@ -74,9 +54,7 @@ export default {
     });
   },
   methods: {
-    showBarcode(pluNumber) {
-      this.showenPlu = pluNumber.toString().padStart(11, '0')
-    }
+
   }
 
 
