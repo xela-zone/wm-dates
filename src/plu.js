@@ -98,6 +98,7 @@ export default {
     4078: "Corn, In Husk",
     4596: "Cucumber, Pickling",
     4062: "Cucumber, Regular",
+    4593: "Cucumber, Hot house / English",
     3089: "Eggplant, Chinese",
     4601: "Eggplant, Japanese",
     4081: "Eggplant, Regular",
