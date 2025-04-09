@@ -19,6 +19,7 @@
       :value="windowLocation" :margin="2" :size="350"></qrcode-vue>
   </div>
   <br>
+  <MeatDateTable />
 
 </template>
 
@@ -29,14 +30,15 @@ import QrcodeVue from 'qrcode.vue'
 import DateTable from './components/DateTable.vue'
 import PLUSearcher from './components/PLUSearcher.vue'
 import ToteLableGenerator from "./components/ToteLableGenerator.vue";
-
+import MeatDateTable from './components/MeatDateTable.vue'
 export default {
   name: "App",
   components: {
     QrcodeVue,
     DateTable,
     PLUSearcher,
-    ToteLableGenerator
+    ToteLableGenerator,
+    MeatDateTable
 
   },
   data() {

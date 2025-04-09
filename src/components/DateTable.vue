@@ -2,9 +2,11 @@
     <h2>Expiration Dates</h2>
     <table>
         <thead>
-            <td>Category</td>
-            <td>Earliest Expiration</td>
-            <td>Days</td>
+            <tr>
+                <td>Category</td>
+                <td>Earliest Expiration</td>
+                <td>Days</td>
+            </tr>
         </thead>
         <tbody>
             <DateComponent :days="0" msg="today" />

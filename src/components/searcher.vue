@@ -5,8 +5,10 @@
         <!--  :value and @input from https://github.com/vuejs/vue/issues/8231#issuecomment-547391171 -->
         <table v-if="FilteredPlus.length < 20">
             <thead>
-                <td>Thing</td>
-                <td>Number</td>
+                <tr>
+                    <td>Thing</td>
+                    <td>Number</td>
+                </tr>
             </thead>
             <tbody>
 
