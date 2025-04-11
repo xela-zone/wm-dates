@@ -85,24 +85,3 @@ export default {
 };
 </script>
 
-<style scoped>
-.controls {
-    margin-bottom: 1rem;
-}
-
-.meat-date-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.meat-date-table th,
-.meat-date-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-
-.meat-date-table th {
-    background-color: #f4f4f4;
-    text-align: left;
-}
-</style>
