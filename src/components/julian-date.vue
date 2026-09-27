@@ -15,25 +15,32 @@
 export default {
   name: "JulianComponent",
   data() {
-    return {date: new Date()}
-  },
-mounted() {
-    self.setInterval(() => {this.date = new Date()}, 1000*60)
-
+    return {
+      date: new Date()
+    };
   },
   props: {
     msg: String,
   },
   computed: {
     julianDate() {
-      //  list of abriviations for months
-      var now = new Date();
-      var start = new Date(now.getFullYear(), 0, 0);
-      var diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
-      var oneDay = 1000 * 60 * 60 * 24;
-      var day = Math.floor(diff / oneDay);
+      const now = this.date;
+      const start = new Date(now.getFullYear(), 0, 0);
+      const diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+      const oneDay = 1000 * 60 * 60 * 24;
+      const day = Math.floor(diff / oneDay);
       return `${day}`;
     },
+  },
+  mounted() {
+    this._timer = setInterval(() => {
+      this.date = new Date();
+    }, 1000 * 60);
+  },
+  beforeUnmount() {
+    if (this._timer) {
+      clearInterval(this._timer);
+    }
   },
 };
 </script>

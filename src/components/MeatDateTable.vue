@@ -29,13 +29,17 @@ export default {
     data() {
         return {
             days: 21,
+            currentDate: new Date(),
         };
     },
     computed: {
         entries() {
             const count = Number(this.days);
-            const today = new Date();
-            const normalizedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            const base = new Date(
+                this.currentDate.getFullYear(),
+                this.currentDate.getMonth(),
+                this.currentDate.getDate()
+            );
             const list = [];
 
             const formatDate = (d) => {
@@ -46,7 +50,7 @@ export default {
             };
 
             for (let i = 0; i < count; i++) {
-                const packDate = new Date(normalizedToday.getFullYear(), normalizedToday.getMonth(), normalizedToday.getDate() - (count - 1) + i);
+                const packDate = new Date(base.getFullYear(), base.getMonth(), base.getDate() - (count - 1) + i);
                 const bestBeforeDate = new Date(packDate.getFullYear(), packDate.getMonth(), packDate.getDate() + count);
 
                 list.push({
@@ -56,6 +60,16 @@ export default {
             }
             return list;
         },
+    },
+    mounted() {
+        this._timer = setInterval(() => {
+            this.currentDate = new Date();
+        }, 1000 * 60);
+    },
+    beforeUnmount() {
+        if (this._timer) {
+            clearInterval(this._timer);
+        }
     },
 };
 </script>
