@@ -1,6 +1,7 @@
 {
   "name": "Pickable Dates",
   "short_name": "Pickable Dates",
+  "description": "Walmart OPD & Food/Consumables Pickable Dates and PLU Lookup Tool",
   "theme_color": "#00bcd4",
   "icons": [
     {

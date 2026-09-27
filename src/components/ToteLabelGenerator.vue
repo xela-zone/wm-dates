@@ -9,8 +9,8 @@
       placeholder="Set the Numbers for the Tote...">
   </div>
 
-  <qrcode-vue v-if="validTote" :background="perfersDark ? '#202b38' : '#fff'"
-    @click="() => { number = null; this.$refs.numberInput.focus() }" :foreground="perfersDark ? '#dbdbdb' : '#363636'"
+  <qrcode-vue v-if="validTote" :background="prefersDark ? '#202b38' : '#fff'"
+    @click="reset" :foreground="prefersDark ? '#dbdbdb' : '#363636'"
     :value="toteNumber" :margin="2" :size="350"></qrcode-vue>
 
   <br>
@@ -20,12 +20,10 @@
 <script>
 import QrcodeVue from 'qrcode.vue'
 
-
-
 export default {
   name: "ToteLabelGenerator",
   props: {
-    perfersDark: Boolean,
+    prefersDark: Boolean,
   },
   components: {
     QrcodeVue,
@@ -38,7 +36,7 @@ export default {
   },
   computed: {
     toteNumber() {
-      return this.letter + this.number.toString().padStart(5, '0')
+      return this.letter + (this.number != null ? String(this.number).padStart(5, '0') : '')
     },
     validTote() {
       return this.letter.length === 1 && this.number > 0
@@ -46,8 +44,9 @@ export default {
   },
 
   methods: {
-    showBarcode(pluNumber) {
-      this.showenPlu = pluNumber.toString().padStart(11, '0')
+    reset() {
+      this.number = null;
+      this.$refs.numberInput?.focus();
     },
     letterHandler(e) {
       this.letter = e.target.value
@@ -55,32 +54,10 @@ export default {
       if (this.letter.length === 1) {
         this.$refs.numberInput.focus()
       }
-
     }
   },
   mounted() {
-    this.$data.letter = localStorage.getItem('tote-letter') || ''
+    this.letter = localStorage.getItem('tote-letter') || ''
   }
 };
 </script>
-
-
-<style src="water.css">
-/* from npm ; water.css */
-</style>
-
-<style scoped>
-/* the above tailered for a light theme */
-.warning {
-  background: #A61208;
-  color: white;
-  padding: 1em;
-  margin: 1em;
-  border-radius: 5px;
-  text-align: center;
-}
-
-.warning>a {
-  color: white
-}
-</style>

@@ -18,9 +18,15 @@ export default {
   data() {
     return {date: new Date()}
   },
-mounted() {
-    self.setInterval(() => {this.date = new Date()}, 1000*60)
-
+  mounted() {
+    this._timer = setInterval(() => {
+      this.date = new Date();
+    }, 1000 * 60);
+  },
+  beforeUnmount() {
+    if (this._timer) {
+      clearInterval(this._timer);
+    }
   },
   props: {
     msg: String,
@@ -28,10 +34,10 @@ mounted() {
   },
   computed: {
     expiration() {
-      //  list of abriviations for months
-      let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      this.date.setDate(this.date.getDate() + this.days);
-      return `(${months[this.date.getMonth()]}) ${this.date.getMonth() + 1 }/${this.date.getDate()}/${this.date.getFullYear()}`;
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const target = new Date(this.date);
+      target.setDate(target.getDate() + this.days);
+      return `(${months[target.getMonth()]}) ${target.getMonth() + 1}/${target.getDate()}/${target.getFullYear()}`;
     },
   },
 };

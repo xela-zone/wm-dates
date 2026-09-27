@@ -1,22 +1,23 @@
 <template>
-  <p class="warning" v-if="host == 'alext.duckdns.org'">
-    this version of the site is going to be removed at some point.<br>please update your bookmarks to
-    <a href="https://alexfromalaska.xyz/wm-date">https://alexfromalaska.xyz/wm-date</a>.
-    see Alex @ OPD in 2074 for more information.
+  <p class="warning" v-if="isLegacyHost">
+    This version of the site is deprecated.<br>
+    Please update your bookmarks and home screen shortcuts to
+    <a href="https://wm.xela.zone">https://wm.xela.zone</a>.<br>
+    See Xela @ Food & Consumables in 2074 for more information.
   </p>
   <DateTable />
-  <PLUSearcher :perfersDark="perfersDark" />
+  <PLUSearcher />
   <br>
-  <ToteLableGenerator :perfersDark="perfersDark" />
+  <ToteLabelGenerator :prefersDark="prefersDark" />
   <br>
   <h3>
-    <a @click="e => { showQR = !showQR }">
+    <a @click="showQR = !showQR" style="cursor: pointer;">
       Share this webtool By Clicking Here
     </a>
   </h3>
   <div v-if="showQR">
-    <qrcode-vue :background="perfersDark ? '#202b38' : '#fff'" :foreground="perfersDark ? '#dbdbdb' : '#363636'"
-      :value="windowLocation" :margin="2" :size="350"></qrcode-vue>
+    <qrcode-vue :background="prefersDark ? '#202b38' : '#fff'" :foreground="prefersDark ? '#dbdbdb' : '#363636'"
+      :value="'https://wm.xela.zone'" :margin="2" :size="350"></qrcode-vue>
   </div>
   <br>
   <MeatDateTable />
@@ -24,45 +25,46 @@
 </template>
 
 <script>
-
-
 import QrcodeVue from 'qrcode.vue'
 import DateTable from './components/DateTable.vue'
 import PLUSearcher from './components/PLUSearcher.vue'
-import ToteLableGenerator from "./components/ToteLableGenerator.vue";
+import ToteLabelGenerator from "./components/ToteLabelGenerator.vue"
 import MeatDateTable from './components/MeatDateTable.vue'
+
 export default {
   name: "App",
   components: {
     QrcodeVue,
     DateTable,
     PLUSearcher,
-    ToteLableGenerator,
+    ToteLabelGenerator,
     MeatDateTable
-
   },
   data() {
     return {
-      windowLocation: window.location.href.split('#')[0],
       host: window.location.host,
-      perfersDark: true,
+      prefersDark: true,
       showQR: false,
     }
   },
-
-  mounted() {
-    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-    this.perfersDark = prefersDarkScheme.matches;
-    prefersDarkScheme.addEventListener('change', (e) => {
-      this.perfersDark = e.matches;
-    });
+  computed: {
+    isLegacyHost() {
+      return this.host !== 'wm.xela.zone' && !this.host.includes('localhost') && !this.host.includes('127.0.0.1');
+    }
   },
-  methods: {
-
+  mounted() {
+    this._mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    this.prefersDark = this._mediaQuery.matches;
+    this._themeHandler = (e) => {
+      this.prefersDark = e.matches;
+    };
+    this._mediaQuery.addEventListener('change', this._themeHandler);
+  },
+  beforeUnmount() {
+    if (this._mediaQuery && this._themeHandler) {
+      this._mediaQuery.removeEventListener('change', this._themeHandler);
+    }
   }
-
-
-
 };
 </script>
 

@@ -28,59 +28,34 @@
 export default {
     data() {
         return {
-            entries: [], // Non-reactive property to store the entries
             days: 21,
         };
     },
-    watch: {
-        days() {
-                if (this.days === "21") {
-                    this.entries = this.twentyOneDays();
-                } else {
-                    this.entries = this.twentyEightDays();
-                }
-        },
-    },
-    methods: {
-        twentyOneDays() {
+    computed: {
+        entries() {
+            const count = Number(this.days);
             const today = new Date();
-            const normalizedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate()); // Normalize to midnight
-            const entries = []; // Start with a fresh array
-            for (let i = 0; i < 21; i++) {
-                // Create a new date for the "Pack Date"
-                const date = new Date(normalizedToday.getFullYear(), normalizedToday.getMonth(), normalizedToday.getDate() - (21 - 1) + i);
+            const normalizedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            const list = [];
 
-                // Create a new date for the "Best Before Date" by adding 21 days
-                const secondDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 21);
+            const formatDate = (d) => {
+                const year = d.getFullYear();
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
 
-                entries.push({
-                    first: date.toISOString().split('T')[0],
-                    second: secondDate.toISOString().split('T')[0],
+            for (let i = 0; i < count; i++) {
+                const packDate = new Date(normalizedToday.getFullYear(), normalizedToday.getMonth(), normalizedToday.getDate() - (count - 1) + i);
+                const bestBeforeDate = new Date(packDate.getFullYear(), packDate.getMonth(), packDate.getDate() + count);
+
+                list.push({
+                    first: formatDate(packDate),
+                    second: formatDate(bestBeforeDate),
                 });
             }
-            return entries; // Return the new array
+            return list;
         },
-        twentyEightDays() {
-            const today = new Date();
-            const normalizedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate()); // Normalize to midnight
-            const entries = []; // Start with a fresh array
-            for (let i = 0; i < 28; i++) {
-                // Create a new date for the "Pack Date"
-                const date = new Date(normalizedToday.getFullYear(), normalizedToday.getMonth(), normalizedToday.getDate() - (28 - 1) + i);
-
-                // Create a new date for the "Best Before Date" by adding 28 days
-                const secondDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 28);
-
-                entries.push({
-                    first: date.toISOString().split('T')[0],
-                    second: secondDate.toISOString().split('T')[0],
-                });
-            }
-            return entries; // Return the new array
-        },
-    },
-    mounted() {
-        this.entries = this.twentyOneDays(); // Initialize entries on mount
     },
 };
 </script>

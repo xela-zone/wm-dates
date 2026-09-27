@@ -14,7 +14,7 @@ export default defineConfig({
       manifest: {
         name: 'Pickable Dates',
         short_name: 'Pickable Dates',
-        description: 'Walmart OPD Pickable Dates and PLU Lookup Tool',
+        description: 'Walmart OPD & Food/Consumables Pickable Dates and PLU Lookup Tool',
         theme_color: '#00bcd4',
         background_color: '#000000',
         display: 'standalone',

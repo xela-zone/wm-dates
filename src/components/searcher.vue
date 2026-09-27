@@ -40,20 +40,19 @@ export default {
     },
     computed: {
         FilteredPlus() {
-            let searchResults = Object.keys(this.plus);
+            const raw = this.search.trim().toLowerCase();
+            if (!raw) return Object.keys(this.plus);
 
-            // take the dictionary plus and filter based on this.search.toLowerCase()
-            this.search.toLowerCase().split(' ').forEach(term => {
-                searchResults = searchResults.filter(key => this.plus[key].toLowerCase().includes(term))
+            const terms = raw.split(/\s+/).filter(Boolean);
+            const isNumeric = /^[0-9]+$/.test(raw);
+
+            return Object.keys(this.plus).filter(key => {
+                const desc = this.plus[key].toLowerCase();
+                const matchesDesc = terms.length > 0 && terms.every(term => desc.includes(term));
+                const matchesKey = isNumeric && key.toLowerCase().includes(raw);
+                return matchesDesc || matchesKey;
             });
-            // if the search is numbers only, then search keys for matches aswell
-            if (this.search.match(/^[0-9]+$/)) {
-                searchResults = searchResults.concat(Object.keys(this.plus).filter(key => key.toLowerCase().includes(this.search.toLowerCase())))
-            }
-            return searchResults
-
         },
-
     },
 
     methods: {
