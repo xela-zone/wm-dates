@@ -17,7 +17,7 @@
           version = "0.1.0";
           src = pkgs.lib.cleanSource ./.;
           fetcherVersion = 4;
-          hash = "sha256-c9LSYM4yOSA+2sfAu+KgOtJwqc72k7331kcGiluDkCA=";
+          hash = "sha256-VI721SskYNzatKAArGfL9g1/GAe4sWF2XwIZ6epCprA=";
         };
 
         # Static website derivation in the Nix store
