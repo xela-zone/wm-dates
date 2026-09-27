@@ -2,9 +2,11 @@
 node_modules
 /dist
 
-# devenv & direnv
-.devenv*
+# Nix & direnv
 .direnv
+result
+result-*
+
 
 # local env files
 .env.local
