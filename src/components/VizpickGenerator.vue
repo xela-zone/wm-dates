@@ -12,6 +12,7 @@
           inputmode="numeric"
           v-model="labelInput"
           @input="onLabelInput"
+          @keydown.enter="commitInput"
           placeholder=" "
           style="font-size: 1.3rem; font-weight: bold; letter-spacing: 2px;"
         >
@@ -215,26 +216,133 @@
       </p>
     </div>
 
-    <!-- History Ring Buffer -->
-    <div v-if="history.length > 0" class="card padding margin">
+    <!-- Pinned Labels (Collapsible dropdown, open by default) -->
+    <details open class="card padding margin">
+      <summary class="bold" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none;">
+        <span style="display: inline-flex; align-items: center; gap: 8px;">
+          <i class="primary-text">push_pin</i>
+          <span>Pinned Labels ({{ pinned.length }})</span>
+        </span>
+      </summary>
+
+      <div class="margin-top">
+        <p v-if="pinned.length === 0" class="secondary-text small-text center-align" style="margin: 8px 0;">
+          No pinned labels yet. Tap <i>push_pin</i> on any recent label to graduate it here with a custom nickname.
+        </p>
+        <div v-else class="pinned-list" style="display: flex; flex-direction: column; gap: 10px;">
+          <div
+            v-for="item in pinned"
+            :key="item.labelId"
+            style="border: 1px solid var(--outline-variant); border-radius: 8px; padding: 10px;"
+          >
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                <button
+                  class="circle transparent small primary-text"
+                  @click="unpin(item.labelId)"
+                  title="Unpin (demote to recents)"
+                  style="margin: 0; flex-shrink: 0;"
+                >
+                  <i>push_pin</i>
+                </button>
+                <div style="min-width: 0;">
+                  <a class="bold pointer" @click="loadLabel(item.labelId)" style="font-size: 1.05rem;" title="Load into canvas">
+                    {{ item.labelId }}
+                  </a>
+                  <span class="small-text secondary-text margin-left" style="white-space: nowrap;">
+                    L:{{ item.left }} · R:{{ item.right }}
+                  </span>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 4px; flex-shrink: 0;">
+                <button
+                  class="circle transparent small"
+                  @click="loadLabel(item.labelId)"
+                  title="Load into canvas"
+                  style="margin: 0;"
+                >
+                  <i>upload</i>
+                </button>
+                <button
+                  class="circle transparent small"
+                  @click="deletePinned(item.labelId)"
+                  title="Delete pinned label"
+                  style="margin: 0;"
+                >
+                  <i>delete</i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Nickname input full width below the header -->
+            <div class="field border small no-margin margin-top" style="height: 2.3rem;">
+              <input
+                type="text"
+                v-model="item.name"
+                @change="savePinnedToStorage"
+                placeholder="Add nickname / location note..."
+                style="font-size: 0.9rem;"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Recent Labels (Clean list without nicknames) -->
+    <div v-if="recents.length > 0" class="card padding margin">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <h6 class="no-margin bold">
+        <h6 class="no-margin bold" style="display: inline-flex; align-items: center; gap: 8px;">
           <i>history</i>
           <span>Recent Labels</span>
         </h6>
-        <button class="circle transparent small" @click="clearHistory" title="Clear History">
-          <i>delete</i>
+        <button class="circle transparent small" @click="clearRecents" title="Clear recents (preserves pinned)" style="margin: 0;">
+          <i>delete_sweep</i>
         </button>
       </div>
-      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <button
-          v-for="item in history"
+
+      <div class="recents-list" style="display: flex; flex-direction: column;">
+        <div
+          v-for="item in recents"
           :key="item.labelId"
-          class="chip surface-variant"
-          @click="loadLabel(item.labelId)"
+          style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--outline-variant); gap: 8px;"
         >
-          <span>{{ item.labelId }} (L:{{ item.left }}, R:{{ item.right }})</span>
-        </button>
+          <div style="min-width: 0; display: flex; align-items: baseline; gap: 8px;">
+            <a class="bold pointer" @click="loadLabel(item.labelId)" style="font-size: 1.05rem;" title="Load into canvas">
+              {{ item.labelId }}
+            </a>
+            <span class="small-text secondary-text" style="white-space: nowrap;">
+              L:{{ item.left }} · R:{{ item.right }}
+            </span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 4px; flex-shrink: 0;">
+            <button
+              class="circle transparent small"
+              @click="pinRecent(item.labelId)"
+              title="Pin (graduate to pinned)"
+              style="margin: 0;"
+            >
+              <i>push_pin</i>
+            </button>
+            <button
+              class="circle transparent small"
+              @click="loadLabel(item.labelId)"
+              title="Load into canvas"
+              style="margin: 0;"
+            >
+              <i>upload</i>
+            </button>
+            <button
+              class="circle transparent small"
+              @click="deleteRecent(item.labelId)"
+              title="Delete from recents"
+              style="margin: 0;"
+            >
+              <i>delete</i>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -247,8 +355,15 @@ import {
   decodeLabel
 } from '@/utils/vizpick.js';
 
-const STORAGE_KEY = 'wm_vizpick_history';
-const MAX_HISTORY = 12;
+const STORAGE_KEY_PINNED = 'wm_vizpick_pinned';
+const STORAGE_KEY_RECENTS = 'wm_vizpick_recents';
+const STORAGE_KEY_LEGACY = 'wm_vizpick_history';
+const MAX_RECENTS = 12;
+
+// 20-bit label limits:
+// High 10 bits: Left marker (0..999 in DICT_5X5_1000)
+// Low 10 bits: Right marker (0..999 in DICT_5X5_1000)
+const MAX_VALID_LABEL_ID = (999 << 10) | 999; // 1,023,975
 
 export default {
   name: 'VizpickGenerator',
@@ -262,7 +377,8 @@ export default {
       rightCanonical: Array.from({ length: 5 }, () => Array(5).fill(true)),
       leftMatch: { markerId: 0, rotation: 0, distance: 25, isValid: false },
       rightMatch: { markerId: 0, rotation: 0, distance: 25, isValid: false },
-      history: []
+      pinned: [],
+      recents: []
     };
   },
   computed: {
@@ -290,23 +406,40 @@ export default {
     }
   },
   async mounted() {
-    this.loadHistoryFromStorage();
+    this.loadStorage();
     await this.clearBoth();
   },
   methods: {
     async onLabelInput() {
       const val = parseInt(this.labelInput, 10);
-      if (!isNaN(val) && val >= 0 && val <= 1048575) {
+      if (!isNaN(val) && val >= 0 && val <= MAX_VALID_LABEL_ID) {
         this.currentLabelId = val;
         await this.renderLabel(val);
-        this.addToHistory(val);
+      }
+    },
+    async commitInput() {
+      const val = parseInt(this.labelInput, 10);
+      if (!isNaN(val) && val >= 0 && val <= MAX_VALID_LABEL_ID) {
+        this.currentLabelId = val;
+        await this.renderLabel(val);
+        this.addToRecents(val);
       }
     },
     async loadLabel(id) {
       this.labelInput = id.toString();
       this.currentLabelId = id;
       await this.renderLabel(id);
-      this.addToHistory(id);
+      const p = this.pinned.find(item => item.labelId === id);
+      if (p) {
+        p.timestamp = Date.now();
+        this.savePinnedToStorage();
+      } else {
+        const r = this.recents.find(item => item.labelId === id);
+        if (r) {
+          r.timestamp = Date.now();
+          this.saveRecentsToStorage();
+        }
+      }
     },
     async renderLabel(labelId) {
       const leftMarkerId = (labelId >>> 10) & 0x3FF;
@@ -412,47 +545,116 @@ export default {
         this.labelInput = newLabelId.toString();
         this.leftCanonical = this.leftGrid.map(row => [...row]);
         this.rightCanonical = this.rightGrid.map(row => [...row]);
-        this.addToHistory(newLabelId);
+        this.addToRecents(newLabelId);
       } else if (!this.leftMatch.isValid || !this.rightMatch.isValid) {
         if (this.labelInput === '') {
           this.currentLabelId = null;
         }
       }
     },
-    addToHistory(labelId) {
+    addToRecents(labelId) {
+      const pinnedItem = this.pinned.find(p => p.labelId === labelId);
+      if (pinnedItem) {
+        pinnedItem.timestamp = Date.now();
+        this.savePinnedToStorage();
+        return;
+      }
+
       const left = (labelId >>> 10) & 0x3FF;
       const right = labelId & 0x3FF;
 
-      this.history = this.history.filter(item => item.labelId !== labelId);
-      this.history.unshift({ labelId, left, right, timestamp: Date.now() });
-      if (this.history.length > MAX_HISTORY) {
-        this.history.pop();
+      this.recents = this.recents.filter(item => item.labelId !== labelId);
+      this.recents.unshift({ labelId, left, right, timestamp: Date.now() });
+      if (this.recents.length > MAX_RECENTS) {
+        this.recents.pop();
       }
-      this.saveHistoryToStorage();
+      this.saveRecentsToStorage();
     },
-    loadHistoryFromStorage() {
+    pinRecent(labelId) {
+      const item = this.recents.find(r => r.labelId === labelId);
+      if (!item) return;
+      this.recents = this.recents.filter(r => r.labelId !== labelId);
+      this.saveRecentsToStorage();
+
+      this.pinned = this.pinned.filter(p => p.labelId !== labelId);
+      this.pinned.unshift({
+        labelId: item.labelId,
+        left: item.left,
+        right: item.right,
+        name: '',
+        timestamp: Date.now()
+      });
+      this.savePinnedToStorage();
+    },
+    unpin(labelId) {
+      const item = this.pinned.find(p => p.labelId === labelId);
+      if (!item) return;
+      this.pinned = this.pinned.filter(p => p.labelId !== labelId);
+      this.savePinnedToStorage();
+
+      this.recents = this.recents.filter(r => r.labelId !== labelId);
+      this.recents.unshift({
+        labelId: item.labelId,
+        left: item.left,
+        right: item.right,
+        timestamp: Date.now()
+      });
+      if (this.recents.length > MAX_RECENTS) {
+        this.recents.pop();
+      }
+      this.saveRecentsToStorage();
+    },
+    deleteRecent(labelId) {
+      this.recents = this.recents.filter(r => r.labelId !== labelId);
+      this.saveRecentsToStorage();
+    },
+    deletePinned(labelId) {
+      this.pinned = this.pinned.filter(p => p.labelId !== labelId);
+      this.savePinnedToStorage();
+    },
+    clearRecents() {
+      this.recents = [];
+      this.saveRecentsToStorage();
+    },
+    loadStorage() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) {
-          this.history = JSON.parse(raw);
+        const rawPinned = localStorage.getItem(STORAGE_KEY_PINNED);
+        if (rawPinned) {
+          this.pinned = JSON.parse(rawPinned);
+        }
+
+        const rawRecents = localStorage.getItem(STORAGE_KEY_RECENTS);
+        if (rawRecents) {
+          this.recents = JSON.parse(rawRecents);
+        } else {
+          const rawLegacy = localStorage.getItem(STORAGE_KEY_LEGACY);
+          if (rawLegacy) {
+            const legacyItems = JSON.parse(rawLegacy);
+            this.recents = legacyItems.map(item => ({
+              labelId: item.labelId,
+              left: item.left,
+              right: item.right,
+              timestamp: item.timestamp || Date.now()
+            }));
+            this.saveRecentsToStorage();
+          }
         }
       } catch (e) {
-        console.warn('Failed to load VizPick history from storage', e);
+        console.warn('Failed to load VizPick storage', e);
       }
     },
-    saveHistoryToStorage() {
+    savePinnedToStorage() {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.history));
+        localStorage.setItem(STORAGE_KEY_PINNED, JSON.stringify(this.pinned));
       } catch (e) {
-        console.warn('Failed to save VizPick history to storage', e);
+        console.warn('Failed to save pinned labels to storage', e);
       }
     },
-    clearHistory() {
-      this.history = [];
+    saveRecentsToStorage() {
       try {
-        localStorage.removeItem(STORAGE_KEY);
+        localStorage.setItem(STORAGE_KEY_RECENTS, JSON.stringify(this.recents));
       } catch (e) {
-        console.warn('Failed to remove VizPick history', e);
+        console.warn('Failed to save recent labels to storage', e);
       }
     }
   }
