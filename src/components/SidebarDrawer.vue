@@ -53,12 +53,21 @@
 
         <div class="divider margin"></div>
 
-        <div class="center-align padding">
-          <p class="small-text">Xela @ Food &amp; Consumables (Store 2074)</p>
+        <div class="center-align padding" style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
           <button class="chip surface-variant" @click="$emit('open-share')">
             <i>qr_code</i>
             <span>Share This Tool</span>
           </button>
+          <a
+            class="chip transparent"
+            href="https://github.com/xela-zone/wm-dates"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="GitHub Repository"
+          >
+            <i>code</i>
+            <span>Source on GitHub</span>
+          </a>
         </div>
       </div>
     </dialog>
