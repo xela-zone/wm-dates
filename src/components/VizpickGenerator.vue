@@ -30,14 +30,25 @@
       >
         <span>{{ sample.name }}: {{ sample.id }}</span>
       </button>
+      <button
+        class="chip small primary"
+        @click="clearBoth"
+      >
+        <i>brush</i>
+        <span>Draw from Scratch</span>
+      </button>
     </div>
 
     <!-- Dual ArUco Tag Container (White thermal-label container for max camera readability) -->
     <div class="card padding center-align margin thermal-tag-card">
-      <div class="tag-header" style="margin-bottom: 8px;">
+      <div class="tag-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
         <span class="chip border bold">
-          Label ID: <span class="primary-text" style="font-size: 1.2rem; margin-left: 4px;">{{ currentLabelId }}</span>
+          Label ID: <span class="primary-text" style="font-size: 1.2rem; margin-left: 4px;">{{ currentLabelId !== null ? currentLabelId : 'Drawing...' }}</span>
         </span>
+        <button class="chip surface-variant small" @click="clearBoth" title="Clear both markers">
+          <i>delete_sweep</i>
+          <span>Clear All</span>
+        </button>
       </div>
 
       <!-- Paired Markers Container -->
@@ -82,7 +93,11 @@
             </svg>
           </div>
           <div class="marker-info margin-top">
-            <div class="bold">Left Marker #{{ leftMatch.markerId }}</div>
+            <div class="bold" style="font-size: 0.95rem;">
+              <span v-if="leftMatch.distance === 0">Left Marker #{{ leftMatch.markerId }}</span>
+              <span v-else-if="leftMatch.isValid">Left Marker #{{ leftMatch.markerId }}</span>
+              <span v-else class="secondary-text">Left (Drawing...)</span>
+            </div>
             <div class="match-badge">
               <span v-if="leftMatch.distance === 0" class="chip small primary">
                 <i>check</i>
@@ -97,19 +112,30 @@
                 <i>auto_fix_high</i>
                 <span>Fix to #{{ leftMatch.markerId }}</span>
               </button>
-              <span v-else class="chip small error">
-                <i>error</i>
-                <span>Unknown</span>
+              <span v-else class="chip small surface-variant secondary-text">
+                <i>brush</i>
+                <span>Closest: #{{ leftMatch.markerId }} (d:{{ leftMatch.distance }})</span>
               </span>
             </div>
-            <button
-              v-if="hasLeftModifications"
-              class="border small margin-top"
-              @click="resetMarker('left')"
-            >
-              <i>undo</i>
-              <span>Reset</span>
-            </button>
+            <div class="marker-actions margin-top">
+              <button class="border small" @click="clearMarker('left')" title="Clear to blank grid">
+                <i>delete_sweep</i>
+                <span>Clear</span>
+              </button>
+              <button class="border small" @click="invertMarker('left')" title="Invert black and white cells">
+                <i>contrast</i>
+                <span>Invert</span>
+              </button>
+              <button
+                v-if="hasLeftModifications"
+                class="border small"
+                @click="resetMarker('left')"
+                title="Reset to canonical pattern"
+              >
+                <i>undo</i>
+                <span>Reset</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -153,7 +179,11 @@
             </svg>
           </div>
           <div class="marker-info margin-top">
-            <div class="bold">Right Marker #{{ rightMatch.markerId }}</div>
+            <div class="bold" style="font-size: 0.95rem;">
+              <span v-if="rightMatch.distance === 0">Right Marker #{{ rightMatch.markerId }}</span>
+              <span v-else-if="rightMatch.isValid">Right Marker #{{ rightMatch.markerId }}</span>
+              <span v-else class="secondary-text">Right (Drawing...)</span>
+            </div>
             <div class="match-badge">
               <span v-if="rightMatch.distance === 0" class="chip small primary">
                 <i>check</i>
@@ -168,19 +198,30 @@
                 <i>auto_fix_high</i>
                 <span>Fix to #{{ rightMatch.markerId }}</span>
               </button>
-              <span v-else class="chip small error">
-                <i>error</i>
-                <span>Unknown</span>
+              <span v-else class="chip small surface-variant secondary-text">
+                <i>brush</i>
+                <span>Closest: #{{ rightMatch.markerId }} (d:{{ rightMatch.distance }})</span>
               </span>
             </div>
-            <button
-              v-if="hasRightModifications"
-              class="border small margin-top"
-              @click="resetMarker('right')"
-            >
-              <i>undo</i>
-              <span>Reset</span>
-            </button>
+            <div class="marker-actions margin-top">
+              <button class="border small" @click="clearMarker('right')" title="Clear to blank grid">
+                <i>delete_sweep</i>
+                <span>Clear</span>
+              </button>
+              <button class="border small" @click="invertMarker('right')" title="Invert black and white cells">
+                <i>contrast</i>
+                <span>Invert</span>
+              </button>
+              <button
+                v-if="hasRightModifications"
+                class="border small"
+                @click="resetMarker('right')"
+                title="Reset to canonical pattern"
+              >
+                <i>undo</i>
+                <span>Reset</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -247,11 +288,17 @@ export default {
   },
   computed: {
     leftModified() {
+      if (this.currentLabelId === null) {
+        return Array.from({ length: 5 }, () => Array(5).fill(false));
+      }
       return this.leftGrid.map((row, r) =>
         row.map((val, c) => val !== this.leftCanonical[r][c])
       );
     },
     rightModified() {
+      if (this.currentLabelId === null) {
+        return Array.from({ length: 5 }, () => Array(5).fill(false));
+      }
       return this.rightGrid.map((row, r) =>
         row.map((val, c) => val !== this.rightCanonical[r][c])
       );
@@ -307,15 +354,47 @@ export default {
         this.rightGrid[r][c] = !this.rightGrid[r][c];
         this.rightMatch = await identifyGrid(this.rightGrid, 2);
       }
-
-      // If both markers are exact matches at upright rotation, update Label ID in real time
-      if (this.leftMatch.distance === 0 && this.rightMatch.distance === 0 &&
-          this.leftMatch.rotation === 0 && this.rightMatch.rotation === 0) {
-        const newLabelId = decodeLabel(this.leftMatch.markerId, this.rightMatch.markerId);
-        this.currentLabelId = newLabelId;
-        this.labelInput = newLabelId.toString();
-        this.addToHistory(newLabelId);
+      this.checkBothMarkers();
+    },
+    async clearMarker(side) {
+      if (side === 'left') {
+        this.leftGrid = Array.from({ length: 5 }, () => Array(5).fill(false));
+        this.leftCanonical = Array.from({ length: 5 }, () => Array(5).fill(false));
+        this.leftMatch = await identifyGrid(this.leftGrid, 2);
+      } else {
+        this.rightGrid = Array.from({ length: 5 }, () => Array(5).fill(false));
+        this.rightCanonical = Array.from({ length: 5 }, () => Array(5).fill(false));
+        this.rightMatch = await identifyGrid(this.rightGrid, 2);
       }
+      this.checkBothMarkers();
+    },
+    async invertMarker(side) {
+      const grid = side === 'left' ? this.leftGrid : this.rightGrid;
+      for (let r = 0; r < 5; r++) {
+        for (let c = 0; c < 5; c++) {
+          grid[r][c] = !grid[r][c];
+        }
+      }
+      if (side === 'left') {
+        this.leftMatch = await identifyGrid(this.leftGrid, 2);
+      } else {
+        this.rightMatch = await identifyGrid(this.rightGrid, 2);
+      }
+      this.checkBothMarkers();
+    },
+    async clearBoth() {
+      this.labelInput = '';
+      this.currentLabelId = null;
+      this.leftGrid = Array.from({ length: 5 }, () => Array(5).fill(false));
+      this.leftCanonical = Array.from({ length: 5 }, () => Array(5).fill(false));
+      this.rightGrid = Array.from({ length: 5 }, () => Array(5).fill(false));
+      this.rightCanonical = Array.from({ length: 5 }, () => Array(5).fill(false));
+      const [lm, rm] = await Promise.all([
+        identifyGrid(this.leftGrid, 2),
+        identifyGrid(this.rightGrid, 2)
+      ]);
+      this.leftMatch = lm;
+      this.rightMatch = rm;
     },
     async resetMarker(side) {
       if (side === 'left') {
@@ -325,6 +404,7 @@ export default {
         this.rightGrid = this.rightCanonical.map(row => [...row]);
         this.rightMatch = await identifyGrid(this.rightGrid, 2);
       }
+      this.checkBothMarkers();
     },
     async applyFix(side, markerId) {
       const canonicalGrid = await getMarkerGrid(markerId);
@@ -337,13 +417,19 @@ export default {
         this.rightCanonical = canonicalGrid.map(row => [...row]);
         this.rightMatch = { markerId, rotation: 0, distance: 0, isValid: true };
       }
-
+      this.checkBothMarkers();
+    },
+    checkBothMarkers() {
       if (this.leftMatch.distance === 0 && this.rightMatch.distance === 0 &&
           this.leftMatch.rotation === 0 && this.rightMatch.rotation === 0) {
         const newLabelId = decodeLabel(this.leftMatch.markerId, this.rightMatch.markerId);
         this.currentLabelId = newLabelId;
         this.labelInput = newLabelId.toString();
         this.addToHistory(newLabelId);
+      } else if (!this.leftMatch.isValid || !this.rightMatch.isValid) {
+        if (this.labelInput === '') {
+          this.currentLabelId = null;
+        }
       }
     },
     addToHistory(labelId) {
@@ -443,5 +529,24 @@ export default {
   margin-top: 4px;
   display: flex;
   justify-content: center;
+}
+
+.marker-actions {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.marker-actions button {
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  height: 28px;
+  min-height: 28px;
+  margin: 0;
+}
+
+.marker-actions button i {
+  font-size: 1rem;
 }
 </style>
