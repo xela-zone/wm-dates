@@ -1,0 +1,42 @@
+/* Cross-browser vertical centering and alignment fixes for Beer CSS form controls (specifically Gecko / Firefox) */
+
+/* 1. Base input & select normalization */
+.field > input,
+.field > select {
+  display: block !important;
+  height: var(--_input, 3rem) !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+}
+
+/* 2. Unlabeled / search fields: vertically center text */
+.field:not(.label) > input {
+  padding-block: calc((var(--_input, 3rem) - 1.5rem) / 2) !important;
+  line-height: 1.5rem !important;
+}
+
+/* 3. Labeled fields: push text below floating label */
+.field.label > input {
+  padding-block-start: 1.1rem !important;
+  padding-block-end: 0.25rem !important;
+  line-height: normal !important;
+}
+
+/* 4. Select dropdowns */
+.field.label > select {
+  padding-block-start: 1rem !important;
+  padding-block-end: 0.25rem !important;
+  line-height: normal !important;
+}
+
+.field:not(.label) > select {
+  padding-block: calc((var(--_input, 3rem) - 1.5rem) / 2) !important;
+  line-height: 1.5rem !important;
+}
+
+/* 5. Firefox-specific inner focus ring reset */
+input::-moz-focus-inner,
+select::-moz-focus-inner {
+  border: 0 !important;
+  padding: 0 !important;
+}
