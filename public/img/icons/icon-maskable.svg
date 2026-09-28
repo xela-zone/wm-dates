@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgM" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00142e"/>
+      <stop offset="100%" stop-color="#002244"/>
+    </linearGradient>
+    <mask id="apertureMaskM">
+      <rect width="512" height="512" fill="white"/>
+      <circle cx="256" cy="256" r="130" fill="black"/>
+    </mask>
+  </defs>
+  <!-- Full bleed square -->
+  <rect width="512" height="512" fill="url(#bgM)"/>
+  <!-- Barcode stripes within safe zone -->
+  <g mask="url(#apertureMaskM)" fill="#0071dc" opacity="0.45">
+    <rect x="56" y="40" width="14" height="432" rx="7"/>
+    <rect x="84" y="40" width="8" height="432" rx="4"/>
+    <rect x="104" y="40" width="24" height="432" rx="10"/>
+    <rect x="138" y="40" width="12" height="432" rx="6"/>
+    <rect x="160" y="40" width="26" height="432" rx="12"/>
+    <rect x="198" y="40" width="10" height="432" rx="5"/>
+    <rect x="218" y="40" width="18" height="432" rx="8"/>
+    
+    <rect x="276" y="40" width="18" height="432" rx="8"/>
+    <rect x="304" y="40" width="10" height="432" rx="5"/>
+    <rect x="326" y="40" width="26" height="432" rx="12"/>
+    <rect x="362" y="40" width="12" height="432" rx="6"/>
+    <rect x="384" y="40" width="24" height="432" rx="10"/>
+    <rect x="420" y="40" width="8" height="432" rx="4"/>
+    <rect x="442" y="40" width="14" height="432" rx="7"/>
+  </g>
+  <!-- Aperture ring -->
+  <circle cx="256" cy="256" r="130" fill="none" stroke="#00bcd4" stroke-width="4" opacity="0.6"/>
+  <!-- Central Spark scaled slightly for safe zone -->
+  <g id="walmart-spark" fill="#ffc220">
+      <path transform="translate(256,256) rotate(0) scale(1.25)"
+        d="M 26, -11 
+           C 22, -9, 18, -5, 18, 0 
+           C 18, 5, 22, 9, 26, 11 
+           L 68, 16 
+           C 78, 17, 86, 10, 86, 0 
+           C 86, -10, 78, -17, 68, -16 
+           Z" />
+      <path transform="translate(256,256) rotate(60) scale(1.25)"
+        d="M 26, -11 
+           C 22, -9, 18, -5, 18, 0 
+           C 18, 5, 22, 9, 26, 11 
+           L 68, 16 
+           C 78, 17, 86, 10, 86, 0 
+           C 86, -10, 78, -17, 68, -16 
+           Z" />
+      <path transform="translate(256,256) rotate(120) scale(1.25)"
+        d="M 26, -11 
+           C 22, -9, 18, -5, 18, 0 
+           C 18, 5, 22, 9, 26, 11 
+           L 68, 16 
+           C 78, 17, 86, 10, 86, 0 
+           C 86, -10, 78, -17, 68, -16 
+           Z" />
+      <path transform="translate(256,256) rotate(180) scale(1.25)"
+        d="M 26, -11 
+           C 22, -9, 18, -5, 18, 0 
+           C 18, 5, 22, 9, 26, 11 
+           L 68, 16 
+           C 78, 17, 86, 10, 86, 0 
+           C 86, -10, 78, -17, 68, -16 
+           Z" />
+      <path transform="translate(256,256) rotate(240) scale(1.25)"
+        d="M 26, -11 
+           C 22, -9, 18, -5, 18, 0 
+           C 18, 5, 22, 9, 26, 11 
+           L 68, 16 
+           C 78, 17, 86, 10, 86, 0 
+           C 86, -10, 78, -17, 68, -16 
+           Z" />
+      <path transform="translate(256,256) rotate(300) scale(1.25)"
+        d="M 26, -11 
+           C 22, -9, 18, -5, 18, 0 
+           C 18, 5, 22, 9, 26, 11 
+           L 68, 16 
+           C 78, 17, 86, 10, 86, 0 
+           C 86, -10, 78, -17, 68, -16 
+           Z" /></g>
+</svg>

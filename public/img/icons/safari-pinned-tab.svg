@@ -1,3 +1,59 @@
-<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M8.00251 14.9297L0 1.07422H6.14651L8.00251 4.27503L9.84583 1.07422H16L8.00251 14.9297Z" fill="black"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <g fill="black">
+    <rect x="40" y="80" width="20" height="352" rx="10"/>
+    <rect x="80" y="60" width="12" height="392" rx="6"/>
+    <rect x="110" y="100" width="28" height="312" rx="14"/>
+    <rect x="374" y="100" width="28" height="312" rx="14"/>
+    <rect x="420" y="60" width="12" height="392" rx="6"/>
+    <rect x="452" y="80" width="20" height="352" rx="10"/>
+  </g>
+  <g id="walmart-spark" fill="black">
+      <path transform="translate(256,256) rotate(0) scale(1.5)"
+        d="M 26, -11 
+           C 22, -9, 18, -5, 18, 0 
+           C 18, 5, 22, 9, 26, 11 
+           L 68, 16 
+           C 78, 17, 86, 10, 86, 0 
+           C 86, -10, 78, -17, 68, -16 
+           Z" />
+      <path transform="translate(256,256) rotate(60) scale(1.5)"
+        d="M 26, -11 
+           C 22, -9, 18, -5, 18, 0 
+           C 18, 5, 22, 9, 26, 11 
+           L 68, 16 
+           C 78, 17, 86, 10, 86, 0 
+           C 86, -10, 78, -17, 68, -16 
+           Z" />
+      <path transform="translate(256,256) rotate(120) scale(1.5)"
+        d="M 26, -11 
+           C 22, -9, 18, -5, 18, 0 
+           C 18, 5, 22, 9, 26, 11 
+           L 68, 16 
+           C 78, 17, 86, 10, 86, 0 
+           C 86, -10, 78, -17, 68, -16 
+           Z" />
+      <path transform="translate(256,256) rotate(180) scale(1.5)"
+        d="M 26, -11 
+           C 22, -9, 18, -5, 18, 0 
+           C 18, 5, 22, 9, 26, 11 
+           L 68, 16 
+           C 78, 17, 86, 10, 86, 0 
+           C 86, -10, 78, -17, 68, -16 
+           Z" />
+      <path transform="translate(256,256) rotate(240) scale(1.5)"
+        d="M 26, -11 
+           C 22, -9, 18, -5, 18, 0 
+           C 18, 5, 22, 9, 26, 11 
+           L 68, 16 
+           C 78, 17, 86, 10, 86, 0 
+           C 86, -10, 78, -17, 68, -16 
+           Z" />
+      <path transform="translate(256,256) rotate(300) scale(1.5)"
+        d="M 26, -11 
+           C 22, -9, 18, -5, 18, 0 
+           C 18, 5, 22, 9, 26, 11 
+           L 68, 16 
+           C 78, 17, 86, 10, 86, 0 
+           C 86, -10, 78, -17, 68, -16 
+           Z" /></g>
 </svg>
