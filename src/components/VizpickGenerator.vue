@@ -350,9 +350,15 @@ export default {
       if (side === 'left') {
         this.leftGrid[r][c] = !this.leftGrid[r][c];
         this.leftMatch = await identifyGrid(this.leftGrid, 2);
+        if (this.leftMatch.distance === 0 && this.leftMatch.rotation === 0) {
+          this.leftCanonical = this.leftGrid.map(row => [...row]);
+        }
       } else {
         this.rightGrid[r][c] = !this.rightGrid[r][c];
         this.rightMatch = await identifyGrid(this.rightGrid, 2);
+        if (this.rightMatch.distance === 0 && this.rightMatch.rotation === 0) {
+          this.rightCanonical = this.rightGrid.map(row => [...row]);
+        }
       }
       this.checkBothMarkers();
     },
@@ -425,6 +431,8 @@ export default {
         const newLabelId = decodeLabel(this.leftMatch.markerId, this.rightMatch.markerId);
         this.currentLabelId = newLabelId;
         this.labelInput = newLabelId.toString();
+        this.leftCanonical = this.leftGrid.map(row => [...row]);
+        this.rightCanonical = this.rightGrid.map(row => [...row]);
         this.addToHistory(newLabelId);
       } else if (!this.leftMatch.isValid || !this.rightMatch.isValid) {
         if (this.labelInput === '') {
