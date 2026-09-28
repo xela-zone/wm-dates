@@ -1,14 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <g fill="black">
-    <rect x="40" y="80" width="20" height="352" rx="10"/>
-    <rect x="80" y="60" width="12" height="392" rx="6"/>
-    <rect x="110" y="100" width="28" height="312" rx="14"/>
-    <rect x="374" y="100" width="28" height="312" rx="14"/>
-    <rect x="420" y="60" width="12" height="392" rx="6"/>
-    <rect x="452" y="80" width="20" height="352" rx="10"/>
+    <rect x="38" y="110" width="14" height="292" rx="7"/>
+    <rect x="66" y="80" width="8" height="352" rx="4"/>
+    <rect x="86" y="130" width="22" height="252" rx="10"/>
+    <rect x="122" y="100" width="12" height="312" rx="6"/>
+    
+    <rect x="378" y="100" width="12" height="312" rx="6"/>
+    <rect x="404" y="130" width="22" height="252" rx="10"/>
+    <rect x="438" y="80" width="8" height="352" rx="4"/>
+    <rect x="460" y="110" width="14" height="292" rx="7"/>
   </g>
   <g id="walmart-spark" fill="black">
-      <path transform="translate(256,256) rotate(0) scale(1.5)"
+      <path transform="translate(256,256) rotate(0) scale(1.55)"
         d="M 26, -11 
            C 22, -9, 18, -5, 18, 0 
            C 18, 5, 22, 9, 26, 11 
@@ -16,7 +19,7 @@
            C 78, 17, 86, 10, 86, 0 
            C 86, -10, 78, -17, 68, -16 
            Z" />
-      <path transform="translate(256,256) rotate(60) scale(1.5)"
+      <path transform="translate(256,256) rotate(60) scale(1.55)"
         d="M 26, -11 
            C 22, -9, 18, -5, 18, 0 
            C 18, 5, 22, 9, 26, 11 
@@ -24,7 +27,7 @@
            C 78, 17, 86, 10, 86, 0 
            C 86, -10, 78, -17, 68, -16 
            Z" />
-      <path transform="translate(256,256) rotate(120) scale(1.5)"
+      <path transform="translate(256,256) rotate(120) scale(1.55)"
         d="M 26, -11 
            C 22, -9, 18, -5, 18, 0 
            C 18, 5, 22, 9, 26, 11 
@@ -32,7 +35,7 @@
            C 78, 17, 86, 10, 86, 0 
            C 86, -10, 78, -17, 68, -16 
            Z" />
-      <path transform="translate(256,256) rotate(180) scale(1.5)"
+      <path transform="translate(256,256) rotate(180) scale(1.55)"
         d="M 26, -11 
            C 22, -9, 18, -5, 18, 0 
            C 18, 5, 22, 9, 26, 11 
@@ -40,7 +43,7 @@
            C 78, 17, 86, 10, 86, 0 
            C 86, -10, 78, -17, 68, -16 
            Z" />
-      <path transform="translate(256,256) rotate(240) scale(1.5)"
+      <path transform="translate(256,256) rotate(240) scale(1.55)"
         d="M 26, -11 
            C 22, -9, 18, -5, 18, 0 
            C 18, 5, 22, 9, 26, 11 
@@ -48,7 +51,7 @@
            C 78, 17, 86, 10, 86, 0 
            C 86, -10, 78, -17, 68, -16 
            Z" />
-      <path transform="translate(256,256) rotate(300) scale(1.5)"
+      <path transform="translate(256,256) rotate(300) scale(1.55)"
         d="M 26, -11 
            C 22, -9, 18, -5, 18, 0 
            C 18, 5, 22, 9, 26, 11 
