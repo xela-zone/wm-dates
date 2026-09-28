@@ -16,7 +16,7 @@ export default defineConfig({
         short_name: 'Pickable Dates',
         description: 'Walmart OPD & Food/Consumables Pickable Dates and PLU Lookup Tool',
         theme_color: '#00bcd4',
-        background_color: '#000000',
+        background_color: '#081b33',
         display: 'standalone',
         start_url: '.',
         icons: [
@@ -60,6 +60,9 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+      },
+      devOptions: {
+        enabled: true
       }
     })
   ],
