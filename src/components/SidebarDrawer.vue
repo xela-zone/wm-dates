@@ -37,7 +37,7 @@
         <div class="divider margin"></div>
 
         <h6>All Tools</h6>
-        <nav class="drawer">
+        <nav class="vertical">
           <a
             v-for="tool in tools"
             :key="tool.id"
