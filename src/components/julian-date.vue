@@ -1,12 +1,13 @@
 <template>
   <tr>
-    <td>
-      Day of the Year
+    <td class="left-align">
+      <b>Day of the Year (Julian)</b>
     </td>
-    <td>
-    </td>
-    <td>
+    <td class="left-align">
       {{ julianDate }}
+    </td>
+    <td class="right-align">
+      <span class="chip small surface-variant">day #</span>
     </td>
   </tr>
 </template>
@@ -41,6 +42,6 @@ export default {
     if (this._timer) {
       clearInterval(this._timer);
     }
-  },
+  }
 };
 </script>
