@@ -13,7 +13,7 @@ export default defineConfig({
     vue(),
     VitePWA({
       registerType: 'autoUpdate',
-      injectRegister: 'auto',
+      injectRegister: null,
       includeAssets: ['favicon.ico', 'img/icons/*.png', 'img/icons/*.svg'],
       manifest: {
         name: 'Pickable Dates',
@@ -63,7 +63,8 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,wasm}']
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,wasm}'],
+        globIgnores: ['**/service-worker.js']
       },
       devOptions: {
         enabled: true
