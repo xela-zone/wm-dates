@@ -281,8 +281,8 @@ export default {
       history: [],
       sampleTags: [
         { id: 680374, name: 'Top Tag' },
-        { id: 1022150, name: 'Bottom Tag' },
-        { id: 496667, name: 'Pallet Tag' }
+        { id: 1022158, name: 'Bottom Tag' },
+        { id: 496675, name: 'Pallet Tag' }
       ]
     };
   },
