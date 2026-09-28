@@ -29,6 +29,12 @@
   line-height: normal !important;
 }
 
+.field.label.small > select,
+.field.label.small > input {
+  padding-block-start: 0.55rem !important;
+  padding-block-end: 0.25rem !important;
+}
+
 .field:not(.label) > select {
   padding-block: calc((var(--_input, 3rem) - 1.5rem) / 2) !important;
   line-height: 1.5rem !important;
