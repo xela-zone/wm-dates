@@ -10,10 +10,11 @@
   },
   "dependencies": {
     "@chenfengyuan/vue-barcode": "^2.0.2",
+    "beercss": "^5.0.3",
     "jsbarcode": "^3.11.6",
+    "material-dynamic-colors": "^1.1.4",
     "qrcode.vue": "^3.4.1",
-    "vue": "^3.4.21",
-    "water.css": "^2.1.1"
+    "vue": "^3.4.21"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.9",
