@@ -19,35 +19,15 @@
       </div>
     </div>
 
-    <!-- Quick Presets -->
-    <div class="margin-bottom" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
-      <span class="small-text secondary-text">Sample Tags:</span>
-      <button
-        v-for="sample in sampleTags"
-        :key="sample.id"
-        class="chip small surface-variant"
-        @click="loadLabel(sample.id)"
-      >
-        <span>{{ sample.name }}: {{ sample.id }}</span>
-      </button>
-      <button
-        class="chip small primary"
-        @click="clearBoth"
-      >
-        <i>brush</i>
-        <span>Draw from Scratch</span>
-      </button>
-    </div>
-
     <!-- Dual ArUco Tag Container (White thermal-label container for max camera readability) -->
     <div class="card padding center-align margin thermal-tag-card">
-      <div class="tag-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <span class="chip border bold">
-          Label ID: <span class="primary-text" style="font-size: 1.2rem; margin-left: 4px;">{{ currentLabelId !== null ? currentLabelId : 'Drawing...' }}</span>
+      <div class="tag-header" style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+        <span class="chip border bold" style="margin: 0;">
+          Label ID: <span class="primary-text" style="font-size: 1.1rem; margin-left: 4px;">{{ currentLabelId !== null ? currentLabelId : 'Drawing...' }}</span>
         </span>
-        <button class="chip surface-variant small" @click="clearBoth" title="Clear both markers">
+        <button class="chip surface-variant small" @click="clearBoth" style="margin: 0;" title="Clear both markers to white canvas">
           <i>delete_sweep</i>
-          <span>Clear All</span>
+          <span>Clear Canvas</span>
         </button>
       </div>
 
@@ -73,6 +53,8 @@
                   width="1"
                   height="1"
                   :fill="isWhite ? '#ffffff' : '#000000'"
+                  :stroke="isWhite ? '#eeeeee' : '#000000'"
+                  stroke-width="0.04"
                   @click="toggleCell('left', r, c)"
                   class="interactive-cell"
                 />
@@ -159,6 +141,8 @@
                   width="1"
                   height="1"
                   :fill="isWhite ? '#ffffff' : '#000000'"
+                  :stroke="isWhite ? '#eeeeee' : '#000000'"
+                  stroke-width="0.04"
                   @click="toggleCell('right', r, c)"
                   class="interactive-cell"
                 />
@@ -270,20 +254,15 @@ export default {
   name: 'VizpickGenerator',
   data() {
     return {
-      labelInput: '680374',
-      currentLabelId: 680374,
-      leftGrid: Array.from({ length: 5 }, () => Array(5).fill(false)),
-      rightGrid: Array.from({ length: 5 }, () => Array(5).fill(false)),
-      leftCanonical: Array.from({ length: 5 }, () => Array(5).fill(false)),
-      rightCanonical: Array.from({ length: 5 }, () => Array(5).fill(false)),
-      leftMatch: { markerId: 664, rotation: 0, distance: 0, isValid: true },
-      rightMatch: { markerId: 438, rotation: 0, distance: 0, isValid: true },
-      history: [],
-      sampleTags: [
-        { id: 680374, name: 'Top Tag' },
-        { id: 1022158, name: 'Bottom Tag' },
-        { id: 496675, name: 'Pallet Tag' }
-      ]
+      labelInput: '',
+      currentLabelId: null,
+      leftGrid: Array.from({ length: 5 }, () => Array(5).fill(true)),
+      rightGrid: Array.from({ length: 5 }, () => Array(5).fill(true)),
+      leftCanonical: Array.from({ length: 5 }, () => Array(5).fill(true)),
+      rightCanonical: Array.from({ length: 5 }, () => Array(5).fill(true)),
+      leftMatch: { markerId: 0, rotation: 0, distance: 25, isValid: false },
+      rightMatch: { markerId: 0, rotation: 0, distance: 25, isValid: false },
+      history: []
     };
   },
   computed: {
@@ -312,7 +291,7 @@ export default {
   },
   async mounted() {
     this.loadHistoryFromStorage();
-    await this.renderLabel(this.currentLabelId);
+    await this.clearBoth();
   },
   methods: {
     async onLabelInput() {
@@ -364,12 +343,12 @@ export default {
     },
     async clearMarker(side) {
       if (side === 'left') {
-        this.leftGrid = Array.from({ length: 5 }, () => Array(5).fill(false));
-        this.leftCanonical = Array.from({ length: 5 }, () => Array(5).fill(false));
+        this.leftGrid = Array.from({ length: 5 }, () => Array(5).fill(true));
+        this.leftCanonical = Array.from({ length: 5 }, () => Array(5).fill(true));
         this.leftMatch = await identifyGrid(this.leftGrid, 2);
       } else {
-        this.rightGrid = Array.from({ length: 5 }, () => Array(5).fill(false));
-        this.rightCanonical = Array.from({ length: 5 }, () => Array(5).fill(false));
+        this.rightGrid = Array.from({ length: 5 }, () => Array(5).fill(true));
+        this.rightCanonical = Array.from({ length: 5 }, () => Array(5).fill(true));
         this.rightMatch = await identifyGrid(this.rightGrid, 2);
       }
       this.checkBothMarkers();
@@ -391,10 +370,10 @@ export default {
     async clearBoth() {
       this.labelInput = '';
       this.currentLabelId = null;
-      this.leftGrid = Array.from({ length: 5 }, () => Array(5).fill(false));
-      this.leftCanonical = Array.from({ length: 5 }, () => Array(5).fill(false));
-      this.rightGrid = Array.from({ length: 5 }, () => Array(5).fill(false));
-      this.rightCanonical = Array.from({ length: 5 }, () => Array(5).fill(false));
+      this.leftGrid = Array.from({ length: 5 }, () => Array(5).fill(true));
+      this.leftCanonical = Array.from({ length: 5 }, () => Array(5).fill(true));
+      this.rightGrid = Array.from({ length: 5 }, () => Array(5).fill(true));
+      this.rightCanonical = Array.from({ length: 5 }, () => Array(5).fill(true));
       const [lm, rm] = await Promise.all([
         identifyGrid(this.leftGrid, 2),
         identifyGrid(this.rightGrid, 2)
