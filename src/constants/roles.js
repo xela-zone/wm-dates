@@ -32,8 +32,7 @@ export const TOOLS = {
     name: 'Vizpick Labels',
     short: 'Vizpick',
     icon: 'inventory_2',
-    department: 'Tools',
-    isStub: true
+    department: 'Tools'
   }
 };
 

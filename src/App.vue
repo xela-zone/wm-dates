@@ -59,14 +59,9 @@
         <MeatDateTable />
       </div>
 
-      <!-- Tool 5: Vizpick Stub -->
+      <!-- Tool 5: Vizpick Generator -->
       <div v-show="activeTool === 'vizpick'">
-        <div class="card padding center-align">
-          <i class="extra">inventory_2</i>
-          <h4>Vizpick Barcode Tools</h4>
-          <p class="secondary-text">Backroom bin and aisle location barcode generator.</p>
-          <p><span class="chip surface-variant">Under Development</span></p>
-        </div>
+        <VizpickGenerator />
       </div>
     </main>
 
@@ -114,6 +109,7 @@ import DateTable from './components/DateTable.vue';
 import PLUSearcher from './components/PLUSearcher.vue';
 import ToteLabelGenerator from "./components/ToteLabelGenerator.vue";
 import MeatDateTable from './components/MeatDateTable.vue';
+import VizpickGenerator from './components/VizpickGenerator.vue';
 import BottomNavBar from './components/BottomNavBar.vue';
 import SidebarDrawer from './components/SidebarDrawer.vue';
 import { useNavigation } from './composables/useNavigation.js';
@@ -126,6 +122,7 @@ export default {
     PLUSearcher,
     ToteLabelGenerator,
     MeatDateTable,
+    VizpickGenerator,
     BottomNavBar,
     SidebarDrawer
   },

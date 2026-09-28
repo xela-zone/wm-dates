@@ -1,6 +1,12 @@
 default:
     @just --list
 
+# Compile WebAssembly core
+wasm:
+    nix shell nixpkgs#rustc nixpkgs#lld --command \
+      rustc --target wasm32-unknown-unknown --crate-type cdylib -C opt-level=3 \
+      crates/vizpick-wasm/src/lib.rs -o src/assets/vizpick.wasm
+
 # Start Vite development server with HMR
 dev:
     pnpm run dev
