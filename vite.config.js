@@ -5,6 +5,10 @@ import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
   base: './',
+  server: {
+    host: true,
+    allowedHosts: ['.ts.net', 'xela-desktop.moose-amberjack.ts.net']
+  },
   plugins: [
     vue(),
     VitePWA({

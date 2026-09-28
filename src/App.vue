@@ -49,6 +49,9 @@ export default {
   },
   computed: {
     isLegacyHost() {
+      if (import.meta.env.DEV) return false;
+      if (this.host.includes('.ts.net') || this.host.includes('.local')) return false;
+      if (this.host.includes('10.') || this.host.includes('192.168.')) return false;
       return this.host !== 'wm.xela.zone' && !this.host.includes('localhost') && !this.host.includes('127.0.0.1');
     }
   },
