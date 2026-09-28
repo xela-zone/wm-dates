@@ -55,7 +55,7 @@
 
         <div class="center-align padding">
           <p class="small-text">Xela @ Food &amp; Consumables (Store 2074)</p>
-          <button class="border small" @click="$emit('open-share')">
+          <button class="chip surface-variant" @click="$emit('open-share')">
             <i>qr_code</i>
             <span>Share This Tool</span>
           </button>

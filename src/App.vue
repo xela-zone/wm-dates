@@ -7,6 +7,9 @@
           <i>menu</i>
         </button>
         <h6 class="max bold no-margin" style="font-size: 1.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ currentToolName }}</h6>
+        <button class="circle transparent" @click="showQR = true" aria-label="Share tool" style="margin: 0; flex-shrink: 0;">
+          <i>share</i>
+        </button>
         <button class="chip surface-variant" @click="isDrawerOpen = true" style="margin: 0; flex-shrink: 0;">
           <i>badge</i>
           <span>{{ currentRoleConfig.short }}</span>
@@ -67,8 +70,17 @@
       </div>
     </main>
 
-    <!-- Share Dialog Modal -->
-    <dialog :class="{ active: showQR }">
+    <!-- Share Dialog Backdrop & Modal -->
+    <div
+      class="overlay"
+      :class="{ active: showQR }"
+      @click="showQR = false"
+      style="z-index: 99; backdrop-filter: blur(2px);"
+    ></div>
+    <dialog
+      :class="{ active: showQR }"
+      style="z-index: 100; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.25);"
+    >
       <h5 class="bold">Share Pickable Dates</h5>
       <div class="center-align padding">
         <qrcode-vue

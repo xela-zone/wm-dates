@@ -15,10 +15,10 @@
   line-height: 1.5rem !important;
 }
 
-/* 3. Labeled fields: push text below floating label */
+/* 3. Labeled fields: vertically centered text below floating label notch */
 .field.label > input {
-  padding-block-start: 1.1rem !important;
-  padding-block-end: 0.25rem !important;
+  padding-block-start: 0.8rem !important;
+  padding-block-end: 0.4rem !important;
   line-height: normal !important;
 }
 
