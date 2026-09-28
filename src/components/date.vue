@@ -1,13 +1,14 @@
 <template>
   <tr>
     <td class="left-align">
-      <b>{{ msg }}</b>
+      <span class="bold">{{ msg }}</span>
     </td>
-    <td class="left-align">
-      {{ expiration }}
+    <td class="center-align" style="white-space: nowrap; font-variant-numeric: tabular-nums;">
+      <span class="secondary-text" style="font-size: 0.85em;">({{ month }})</span>
+      <span class="bold" style="margin-left: 4px;">{{ formattedDate }}</span>
     </td>
-    <td class="right-align">
-      <span class="chip small surface-variant">{{ days }}d</span>
+    <td class="right-align" style="white-space: nowrap;">
+      <span class="chip small surface-variant bold">{{ days }}d</span>
     </td>
   </tr>
 </template>
@@ -33,14 +34,17 @@ export default {
     days: Number,
   },
   computed: {
-    expiration() {
+    targetDate() {
       const now = this.date;
-      const target = new Date(now.getFullYear(), now.getMonth(), now.getDate() + this.days);
+      return new Date(now.getFullYear(), now.getMonth(), now.getDate() + this.days);
+    },
+    month() {
       const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      const month = months[target.getMonth()];
-      const day = target.getDate();
-      const year = target.getFullYear();
-      return `(${month}) ${target.getMonth() + 1}/${day}/${year}`;
+      return months[this.targetDate.getMonth()];
+    },
+    formattedDate() {
+      const t = this.targetDate;
+      return `${t.getMonth() + 1}/${t.getDate()}/${t.getFullYear()}`;
     }
   }
 };

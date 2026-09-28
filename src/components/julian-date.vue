@@ -1,13 +1,13 @@
 <template>
   <tr>
     <td class="left-align">
-      <b>Day of the Year (Julian)</b>
+      <span class="bold">Day of Year (Julian)</span>
     </td>
-    <td class="left-align">
-      {{ julianDate }}
+    <td class="center-align" style="white-space: nowrap; font-variant-numeric: tabular-nums;">
+      <span class="bold">Day {{ julianDate }}</span>
     </td>
-    <td class="right-align">
-      <span class="chip small surface-variant">day #</span>
+    <td class="right-align" style="white-space: nowrap;">
+      <span class="chip small primary bold">#{{ julianDate }}</span>
     </td>
   </tr>
 </template>

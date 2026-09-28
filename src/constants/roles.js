@@ -34,20 +34,6 @@ export const TOOLS = {
     icon: 'inventory_2',
     department: 'Tools',
     isStub: true
-  },
-  'julian': {
-    id: 'julian',
-    name: 'Julian Calendar',
-    short: 'Julian',
-    icon: 'today',
-    department: 'General'
-  },
-  'share': {
-    id: 'share',
-    name: 'Share Tool',
-    short: 'Share',
-    icon: 'share',
-    department: 'General'
   }
 };
 
@@ -71,7 +57,7 @@ export const ROLES = {
     label: 'Sales Floor',
     short: 'Floor',
     defaultTool: 'plu-search',
-    bottomNav: ['plu-search', 'opd-dates', 'julian']
+    bottomNav: ['plu-search', 'opd-dates', 'meat-dates']
   }
 };
 

@@ -1,26 +1,21 @@
 <template>
   <div class="tote-generator">
-    <div class="row middle margin">
-      <h5 class="max bold">Generate a Tote Label</h5>
-      <span class="badge surface-variant">OPD</span>
-    </div>
+    <p class="secondary-text" style="margin-bottom: 12px;">Enter staging letter and 5-digit number to generate the tote QR barcode:</p>
 
-    <p class="secondary-text">Enter staging letter and 5-digit number to generate the tote QR barcode:</p>
-
-    <div class="row margin middle" style="gap: 12px;">
-      <div class="field label border round" style="max-width: 110px;">
+    <div class="grid no-margin" style="gap: 12px; margin-bottom: 16px;">
+      <div class="s4 m3 field label border">
         <input
           maxlength="1"
           type="text"
           :value="letter"
           @input="letterHandler"
-          style="text-transform: uppercase; text-align: center; font-size: 1.5rem; font-weight: bold;"
+          style="text-transform: uppercase; text-align: center; font-size: 1.3rem; font-weight: bold;"
           placeholder=" "
         >
         <label>Letter</label>
       </div>
 
-      <div class="field label border round max">
+      <div class="s8 m9 field label border">
         <input
           maxlength="5"
           ref="numberInput"
@@ -28,31 +23,41 @@
           inputmode="numeric"
           :value="number"
           @input="numberHandler"
-          style="font-size: 1.5rem; font-weight: bold; letter-spacing: 2px;"
+          style="font-size: 1.3rem; font-weight: bold; letter-spacing: 2px;"
           placeholder=" "
         >
         <label>5-Digit Tote Number</label>
       </div>
     </div>
 
-    <div v-if="validTote" class="card padding center-align margin" @click="reset" style="cursor: pointer;">
-      <h6>Tote Code: <span class="bold primary-text">{{ toteNumber }}</span></h6>
+    <!-- Scannable Barcode Container (Matches Theme) -->
+    <div
+      v-if="validTote"
+      class="card padding center-align margin"
+      @click="reset"
+      style="cursor: pointer;"
+    >
+      <h6 class="no-margin">
+        Tote: <span class="bold primary-text" style="font-size: 1.6rem;">{{ toteNumber }}</span>
+      </h6>
       <div class="center-align padding">
         <qrcode-vue
-          :background="prefersDark ? '#202b38' : '#fff'"
-          :foreground="prefersDark ? '#dbdbdb' : '#363636'"
+          render-as="svg"
+          background="transparent"
+          :foreground="prefersDark ? '#ffffff' : '#000000'"
           :value="toteNumber"
           :margin="2"
-          :size="280"
+          :size="260"
         ></qrcode-vue>
       </div>
-      <button class="border small margin">
+      <button class="border small">
         <i>refresh</i>
         <span>Tap to Reset</span>
       </button>
     </div>
+
     <div v-else class="card padding center-align margin surface-variant">
-      <p>Enter 1 letter and a number above to generate the tote barcode.</p>
+      <p class="secondary-text no-margin">Enter 1 letter and a number above to generate the tote barcode.</p>
     </div>
   </div>
 </template>

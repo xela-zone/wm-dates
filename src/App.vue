@@ -6,8 +6,8 @@
         <button class="circle transparent" @click="isDrawerOpen = true" aria-label="Open menu">
           <i>menu</i>
         </button>
-        <h5 class="max bold">{{ currentToolName }}</h5>
-        <button class="chip surface-variant" @click="isDrawerOpen = true">
+        <h6 class="max bold no-margin" style="font-size: 1.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ currentToolName }}</h6>
+        <button class="chip surface-variant" @click="isDrawerOpen = true" style="margin: 0; flex-shrink: 0;">
           <i>badge</i>
           <span>{{ currentRoleConfig.short }}</span>
         </button>
@@ -56,58 +56,31 @@
         <MeatDateTable />
       </div>
 
-      <!-- Tool 5: Julian Calendar -->
-      <div v-show="activeTool === 'julian'">
-        <div class="card padding">
-          <h4>Julian Date Calculator</h4>
-          <p>Current day-of-year used for meat and perishable date codes:</p>
-          <table class="border">
-            <tbody>
-              <JulianComponent />
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Tool 6: Vizpick Stub -->
+      <!-- Tool 5: Vizpick Stub -->
       <div v-show="activeTool === 'vizpick'">
         <div class="card padding center-align">
           <i class="extra">inventory_2</i>
           <h4>Vizpick Barcode Tools</h4>
           <p class="secondary-text">Backroom bin and aisle location barcode generator.</p>
-          <p><span class="badge surface-variant">Under Development</span></p>
-        </div>
-      </div>
-
-      <!-- Tool 7: Share Tool View -->
-      <div v-show="activeTool === 'share'">
-        <div class="card padding center-align">
-          <h4>Share This Webtool</h4>
-          <qrcode-vue
-            :background="prefersDark ? '#202b38' : '#fff'"
-            :foreground="prefersDark ? '#dbdbdb' : '#363636'"
-            :value="'https://wm.xela.zone'"
-            :margin="2"
-            :size="280"
-          ></qrcode-vue>
-          <p class="margin">https://wm.xela.zone</p>
-          <p class="secondary-text">Works completely offline once installed.</p>
+          <p><span class="chip surface-variant">Under Development</span></p>
         </div>
       </div>
     </main>
 
     <!-- Share Dialog Modal -->
     <dialog :class="{ active: showQR }">
-      <h5>Share Pickable Dates</h5>
+      <h5 class="bold">Share Pickable Dates</h5>
       <div class="center-align padding">
         <qrcode-vue
-          :background="prefersDark ? '#202b38' : '#fff'"
-          :foreground="prefersDark ? '#dbdbdb' : '#363636'"
+          render-as="svg"
+          background="transparent"
+          :foreground="prefersDark ? '#ffffff' : '#000000'"
           :value="'https://wm.xela.zone'"
           :margin="2"
-          :size="260"
+          :size="240"
         ></qrcode-vue>
         <p class="margin">https://wm.xela.zone</p>
+        <p class="small-text secondary-text">Works completely offline once installed.</p>
       </div>
       <nav class="right-align">
         <button class="border" @click="showQR = false">Close</button>
@@ -129,7 +102,6 @@ import DateTable from './components/DateTable.vue';
 import PLUSearcher from './components/PLUSearcher.vue';
 import ToteLabelGenerator from "./components/ToteLabelGenerator.vue";
 import MeatDateTable from './components/MeatDateTable.vue';
-import JulianComponent from './components/julian-date.vue';
 import BottomNavBar from './components/BottomNavBar.vue';
 import SidebarDrawer from './components/SidebarDrawer.vue';
 import { useNavigation } from './composables/useNavigation.js';
@@ -142,7 +114,6 @@ export default {
     PLUSearcher,
     ToteLabelGenerator,
     MeatDateTable,
-    JulianComponent,
     BottomNavBar,
     SidebarDrawer
   },
@@ -187,7 +158,7 @@ export default {
 <style scoped>
 .main-content {
   padding-top: calc(64px + env(safe-area-inset-top, 0px));
-  padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(108px + env(safe-area-inset-bottom, 0px));
   max-width: 900px;
   margin: 0 auto;
 }

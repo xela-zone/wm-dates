@@ -47,7 +47,7 @@
           >
             <i>{{ tool.icon }}</i>
             <span class="max">{{ tool.name }}</span>
-            <span v-if="tool.isStub" class="badge surface-variant">Soon</span>
+            <span v-if="tool.isStub" class="chip small surface-variant" style="margin: 0;">Soon</span>
           </a>
         </nav>
 

@@ -1,17 +1,12 @@
 <template>
   <div class="date-table-container">
-    <div class="row middle margin">
-      <h5 class="max bold">Expiration Dates</h5>
-      <span class="badge surface-variant">OPD</span>
-    </div>
-
-    <div class="card padding no-margin">
-      <table class="border stripes medium-space">
+    <div class="card no-padding no-margin">
+      <table class="border medium-space">
         <thead>
           <tr>
             <th class="left-align">Category</th>
-            <th class="left-align">Earliest Expiration</th>
-            <th class="right-align">Days</th>
+            <th class="center-align" style="white-space: nowrap;">Earliest Expiration</th>
+            <th class="right-align" style="white-space: nowrap;">Days</th>
           </tr>
         </thead>
         <tbody>

@@ -1,21 +1,20 @@
 <template>
   <div class="searcher-container">
-    <div class="field label border round prefix suffix margin">
+    <div class="field border prefix suffix margin" style="border-radius: 28px;">
       <i>search</i>
       <input
         type="search"
         :value="search"
         @input="e => search = e.target.value"
-        placeholder=" "
+        placeholder="Search produce name or PLU..."
       >
-      <label>Search Produce Name or PLU...</label>
       <a v-if="search" class="circle transparent" @click="search = ''" role="button">
         <i>close</i>
       </a>
     </div>
 
-    <div v-if="FilteredPlus.length < 20 && FilteredPlus.length > 0" class="card padding no-margin">
-      <table class="border stripes medium-space">
+    <div v-if="FilteredPlus.length < 20 && FilteredPlus.length > 0" class="card no-padding no-margin">
+      <table class="border medium-space">
         <thead>
           <tr>
             <th class="left-align">Produce Item</th>
@@ -31,7 +30,7 @@
           >
             <td class="left-align bold">{{ plus[result] }}</td>
             <td class="right-align">
-              <span class="chip small primary">{{ result }}</span>
+              <span class="chip small primary bold">{{ result }}</span>
             </td>
           </tr>
         </tbody>

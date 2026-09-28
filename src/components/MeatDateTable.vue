@@ -1,8 +1,8 @@
 <template>
   <div class="meat-table-container">
     <div class="row middle margin">
-      <h5 class="max bold">Meat Pack Date Calculator</h5>
-      <div class="field label border round small" style="min-width: 140px;">
+      <p class="max secondary-text no-margin">Select pack date shelf life:</p>
+      <div class="field label border small" style="min-width: 140px;">
         <select id="entry-count" v-model="days">
           <option value="21">21 Days</option>
           <option value="28">28 Days</option>
@@ -11,8 +11,8 @@
       </div>
     </div>
 
-    <div class="card padding no-margin">
-      <table class="border stripes medium-space">
+    <div class="card no-padding no-margin">
+      <table class="border medium-space">
         <thead>
           <tr>
             <th class="left-align">Pack Date</th>
@@ -21,8 +21,8 @@
         </thead>
         <tbody>
           <tr v-for="(entry, index) in entries" :key="index">
-            <td class="left-align">{{ entry.first }}</td>
-            <td class="left-align bold">{{ entry.second }}</td>
+            <td class="left-align" style="font-variant-numeric: tabular-nums;">{{ entry.first }}</td>
+            <td class="left-align bold" style="font-variant-numeric: tabular-nums;">{{ entry.second }}</td>
           </tr>
         </tbody>
       </table>
