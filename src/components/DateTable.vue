@@ -12,11 +12,11 @@
         <tbody>
           <DateComponent :days="0" msg="Today" />
           <DateComponent :days="1" msg="Doughnuts" />
-          <DateComponent :days="2" msg="Deli meat, fresh seafood, Bakery bread" />
+          <DateComponent :days="2" msg="Meat, Service Deli, Bakery" />
           <DateComponent :days="3" msg="Produce" />
           <DateComponent :days="5" msg="Commercial bread" />
-          <DateComponent :days="7" msg="Dairy, 97 wall" />
-          <DateComponent :days="30" msg="Frozen, Pharmacy, Dry Grocery" />
+          <DateComponent :days="7" msg="Dairy, prepack lunch meat" />
+          <DateComponent :days="30" msg="Frozen, Everything else" />
           <JulianComponent />
         </tbody>
       </table>
