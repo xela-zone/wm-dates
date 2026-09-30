@@ -663,10 +663,7 @@ export default {
 
 <style scoped>
 .thermal-tag-card {
-  background: #ffffff;
-  color: #000000;
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .markers-pair-wrapper {
