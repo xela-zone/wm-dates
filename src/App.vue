@@ -24,9 +24,11 @@
       :currentRole="currentRole"
       :tools="TOOLS"
       :activeTool="activeTool"
+      :currentMode="mode"
       @close="isDrawerOpen = false"
       @select-role="setRole"
       @select-tool="selectTool"
+      @select-mode="setMode"
       @open-share="showQR = true; isDrawerOpen = false"
     />
 
@@ -46,7 +48,7 @@
 
       <!-- Tool 2: Tote Label Barcode Generator -->
       <div v-show="activeTool === 'tote-label'">
-        <ToteLabelGenerator :prefersDark="prefersDark" />
+        <ToteLabelGenerator :prefersDark="isDark" />
       </div>
 
       <!-- Tool 3: PLU Lookup -->
@@ -81,7 +83,7 @@
         <qrcode-vue
           render-as="svg"
           background="transparent"
-          :foreground="prefersDark ? '#ffffff' : '#000000'"
+          :foreground="isDark ? '#ffffff' : '#000000'"
           :value="'https://wm.xela.zone'"
           :margin="2"
           :size="240"
@@ -113,6 +115,7 @@ import VizpickGenerator from './components/VizpickGenerator.vue';
 import BottomNavBar from './components/BottomNavBar.vue';
 import SidebarDrawer from './components/SidebarDrawer.vue';
 import { useNavigation } from './composables/useNavigation.js';
+import { useTheme } from './composables/useTheme.js';
 
 export default {
   name: "App",
@@ -128,12 +131,12 @@ export default {
   },
   setup() {
     const nav = useNavigation();
-    return { ...nav };
+    const theme = useTheme();
+    return { ...nav, ...theme };
   },
   data() {
     return {
       host: window.location.host,
-      prefersDark: true,
       showQR: false,
     };
   },
@@ -146,19 +149,6 @@ export default {
       if (this.host.includes('.ts.net') || this.host.includes('.local')) return false;
       if (this.host.includes('10.') || this.host.includes('192.168.')) return false;
       return this.host !== 'wm.xela.zone' && !this.host.includes('localhost') && !this.host.includes('127.0.0.1');
-    }
-  },
-  mounted() {
-    this._mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    this.prefersDark = this._mediaQuery.matches;
-    this._themeHandler = (e) => {
-      this.prefersDark = e.matches;
-    };
-    this._mediaQuery.addEventListener('change', this._themeHandler);
-  },
-  beforeUnmount() {
-    if (this._mediaQuery && this._themeHandler) {
-      this._mediaQuery.removeEventListener('change', this._themeHandler);
     }
   }
 };

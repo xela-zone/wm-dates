@@ -46,3 +46,9 @@ select::-moz-focus-inner {
   border: 0 !important;
   padding: 0 !important;
 }
+
+/* 6. Visual stress & Irlen syndrome: softened dark mode text (prevents harsh #ffffff glare) */
+body.dark {
+  --on-surface: #e2e2e6;
+  color: var(--on-surface);
+}

@@ -36,6 +36,37 @@
 
         <div class="divider margin"></div>
 
+        <h6>Appearance</h6>
+        <p class="small-text">Adjust screen lighting and contrast.</p>
+        <div class="row wrap" style="gap: 8px;">
+          <button
+            class="chip"
+            :class="{ fill: currentMode === 'auto', border: currentMode !== 'auto' }"
+            @click="$emit('select-mode', 'auto')"
+          >
+            <i>brightness_auto</i>
+            <span>Auto</span>
+          </button>
+          <button
+            class="chip"
+            :class="{ fill: currentMode === 'light', border: currentMode !== 'light' }"
+            @click="$emit('select-mode', 'light')"
+          >
+            <i>light_mode</i>
+            <span>Light</span>
+          </button>
+          <button
+            class="chip"
+            :class="{ fill: currentMode === 'dark', border: currentMode !== 'dark' }"
+            @click="$emit('select-mode', 'dark')"
+          >
+            <i>dark_mode</i>
+            <span>Dark</span>
+          </button>
+        </div>
+
+        <div class="divider margin"></div>
+
         <h6>All Tools</h6>
         <nav class="vertical">
           <a
@@ -97,9 +128,13 @@ export default {
     activeTool: {
       type: String,
       required: true
+    },
+    currentMode: {
+      type: String,
+      default: 'auto'
     }
   },
-  emits: ['close', 'select-role', 'select-tool', 'open-share']
+  emits: ['close', 'select-role', 'select-tool', 'open-share', 'select-mode']
 };
 </script>
 
