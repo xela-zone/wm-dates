@@ -19,18 +19,19 @@
       </header>
 
       <div class="padding">
-        <h6>Your Role</h6>
-        <p class="small-text">Configures your 3 quick-access tools in the bottom bar.</p>
-        <div class="row wrap" style="gap: 8px;">
+        <h6>Bottom Navigation</h6>
+        <p class="small-text">Pin up to {{ maxBottomNav }} quick-access tools ({{ bottomNavIds.length }}/{{ maxBottomNav }}):</p>
+        <div class="bottom-nav-chips row wrap" style="gap: 8px;">
           <button
-            v-for="role in roles"
-            :key="role.id"
+            v-for="tool in tools"
+            :key="tool.id"
             class="chip"
-            :class="{ fill: currentRole === role.id, border: currentRole !== role.id }"
-            @click="$emit('select-role', role.id)"
+            :class="{ fill: isPinned(tool.id), border: !isPinned(tool.id) }"
+            @click="$emit('toggle-bottom-nav', tool.id)"
+            :disabled="!isPinned(tool.id) && bottomNavIds.length >= maxBottomNav"
           >
-            <i>badge</i>
-            <span>{{ role.label }}</span>
+            <i>{{ isPinned(tool.id) ? 'check' : 'add' }}</i>
+            <span>{{ tool.short }}</span>
           </button>
         </div>
 
@@ -75,10 +76,20 @@
             :class="{ active: activeTool === tool.id }"
             @click="$emit('select-tool', tool.id)"
             role="button"
+            style="display: flex; align-items: center;"
           >
             <i>{{ tool.icon }}</i>
             <span class="max">{{ tool.name }}</span>
-            <span v-if="tool.isStub" class="chip small surface-variant" style="margin: 0;">Soon</span>
+            <span v-if="tool.isStub" class="chip small surface-variant" style="margin: 0 4px;">Soon</span>
+            <button
+              class="circle transparent small"
+              @click.stop="$emit('toggle-bottom-nav', tool.id)"
+              :title="isPinned(tool.id) ? 'Unpin from bottom bar' : (bottomNavIds.length >= maxBottomNav ? 'Max pinned reached' : 'Pin to bottom bar')"
+              :disabled="!isPinned(tool.id) && bottomNavIds.length >= maxBottomNav"
+              style="margin: 0; flex-shrink: 0;"
+            >
+              <i :class="{ 'primary-text': isPinned(tool.id) }">{{ isPinned(tool.id) ? 'push_pin' : 'add' }}</i>
+            </button>
           </a>
         </nav>
 
@@ -113,13 +124,13 @@ export default {
       type: Boolean,
       required: true
     },
-    roles: {
-      type: Object,
+    bottomNavIds: {
+      type: Array,
       required: true
     },
-    currentRole: {
-      type: String,
-      required: true
+    maxBottomNav: {
+      type: Number,
+      default: 4
     },
     tools: {
       type: Object,
@@ -134,7 +145,12 @@ export default {
       default: 'auto'
     }
   },
-  emits: ['close', 'select-role', 'select-tool', 'open-share', 'select-mode']
+  emits: ['close', 'toggle-bottom-nav', 'select-tool', 'open-share', 'select-mode'],
+  methods: {
+    isPinned(toolId) {
+      return this.bottomNavIds.includes(toolId);
+    }
+  }
 };
 </script>
 

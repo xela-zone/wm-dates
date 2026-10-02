@@ -10,23 +10,19 @@
         <button class="circle transparent" @click="showQR = true" aria-label="Share tool" style="margin: 0; flex-shrink: 0;">
           <i>share</i>
         </button>
-        <button class="chip surface-variant" @click="isDrawerOpen = true" style="margin: 0; flex-shrink: 0;">
-          <i>badge</i>
-          <span>{{ currentRoleConfig.short }}</span>
-        </button>
       </nav>
     </header>
 
     <!-- Slide-over Drawer -->
     <SidebarDrawer
       :isOpen="isDrawerOpen"
-      :roles="ROLES"
-      :currentRole="currentRole"
+      :bottomNavIds="bottomNavIds"
+      :maxBottomNav="MAX_BOTTOM_NAV"
       :tools="TOOLS"
       :activeTool="activeTool"
       :currentMode="mode"
       @close="isDrawerOpen = false"
-      @select-role="setRole"
+      @toggle-bottom-nav="toggleBottomNavTool"
       @select-tool="selectTool"
       @select-mode="setMode"
       @open-share="showQR = true; isDrawerOpen = false"

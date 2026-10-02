@@ -35,29 +35,7 @@ export const TOOLS = {
     department: 'Tools'
   }
 };
+export const DEFAULT_TOOL = 'opd-dates';
+export const DEFAULT_BOTTOM_NAV = ['opd-dates', 'meat-dates', 'vizpick', 'plu-search'];
+export const MAX_BOTTOM_NAV = 4;
 
-export const ROLES = {
-  opd: {
-    id: 'opd',
-    label: 'OPD / Fulfillment',
-    short: 'OPD',
-    defaultTool: 'opd-dates',
-    bottomNav: ['opd-dates', 'tote-label', 'plu-search']
-  },
-  fresh: {
-    id: 'fresh',
-    label: 'Meat & Produce',
-    short: 'Fresh',
-    defaultTool: 'meat-dates',
-    bottomNav: ['meat-dates', 'plu-search', 'vizpick']
-  },
-  salesfloor: {
-    id: 'salesfloor',
-    label: 'Sales Floor',
-    short: 'Floor',
-    defaultTool: 'plu-search',
-    bottomNav: ['plu-search', 'opd-dates', 'meat-dates']
-  }
-};
-
-export const DEFAULT_ROLE = 'opd';

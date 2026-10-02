@@ -1,27 +1,76 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { TOOLS, ROLES, DEFAULT_ROLE } from '../constants/roles.js';
+import { TOOLS, DEFAULT_TOOL, DEFAULT_BOTTOM_NAV, MAX_BOTTOM_NAV } from '../constants/tools.js';
+
+const STORAGE_KEY_BOTTOM_NAV = 'wm-dates:bottom-nav';
+const LEGACY_STORAGE_KEY_ROLE = 'wm-dates:role';
 
 export function useNavigation() {
-  const storedRole = localStorage.getItem('wm-dates:role');
-  const initialRole = (storedRole && ROLES[storedRole]) ? storedRole : DEFAULT_ROLE;
-  const currentRole = ref(initialRole);
+  function getInitialBottomNav() {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY_BOTTOM_NAV);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const valid = parsed.filter(id => TOOLS[id]).slice(0, MAX_BOTTOM_NAV);
+          if (valid.length > 0) return valid;
+        }
+      }
+
+      // Migrate from legacy role if present
+      const legacyRole = localStorage.getItem(LEGACY_STORAGE_KEY_ROLE);
+      if (legacyRole) {
+        localStorage.removeItem(LEGACY_STORAGE_KEY_ROLE);
+        if (legacyRole === 'fresh') {
+          return ['meat-dates', 'plu-search', 'vizpick', 'opd-dates'];
+        } else if (legacyRole === 'salesfloor') {
+          return ['plu-search', 'opd-dates', 'meat-dates', 'vizpick'];
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to load bottom nav config', e);
+    }
+    return [...DEFAULT_BOTTOM_NAV];
+  }
+
+  const bottomNavIds = ref(getInitialBottomNav());
 
   const initialHash = window.location.hash.replace(/^#/, '');
-  const initialTool = (initialHash && TOOLS[initialHash])
-    ? initialHash
-    : ROLES[currentRole.value].defaultTool;
+  const initialToolId = initialHash.split('?')[0];
+  const initialTool = (initialToolId && TOOLS[initialToolId])
+    ? initialToolId
+    : (bottomNavIds.value[0] || DEFAULT_TOOL);
 
   const activeTool = ref(initialTool);
   const isDrawerOpen = ref(false);
 
   const bottomNavTools = computed(() => {
-    const roleConfig = ROLES[currentRole.value] || ROLES[DEFAULT_ROLE];
-    return roleConfig.bottomNav.map(id => TOOLS[id]).filter(Boolean);
+    return bottomNavIds.value.map(id => TOOLS[id]).filter(Boolean);
   });
 
-  const currentRoleConfig = computed(() => {
-    return ROLES[currentRole.value] || ROLES[DEFAULT_ROLE];
-  });
+  function saveBottomNav() {
+    try {
+      localStorage.setItem(STORAGE_KEY_BOTTOM_NAV, JSON.stringify(bottomNavIds.value));
+    } catch (e) {
+      console.warn('Failed to save bottom nav config', e);
+    }
+  }
+
+  function toggleBottomNavTool(toolId) {
+    if (!TOOLS[toolId]) return;
+    const idx = bottomNavIds.value.indexOf(toolId);
+    if (idx !== -1) {
+      if (bottomNavIds.value.length <= 1) return; // Keep at least 1 tool
+      bottomNavIds.value.splice(idx, 1);
+    } else {
+      if (bottomNavIds.value.length >= MAX_BOTTOM_NAV) return; // Max 4 tools
+      bottomNavIds.value.push(toolId);
+    }
+    saveBottomNav();
+  }
+
+  function isBottomNavPinned(toolId) {
+    return bottomNavIds.value.includes(toolId);
+  }
 
   function selectTool(toolId) {
     if (!TOOLS[toolId]) return;
@@ -30,21 +79,11 @@ export function useNavigation() {
     isDrawerOpen.value = false;
   }
 
-  function setRole(roleId) {
-    if (!ROLES[roleId]) return;
-    currentRole.value = roleId;
-    localStorage.setItem('wm-dates:role', roleId);
-
-    const roleConfig = ROLES[roleId];
-    if (!roleConfig.bottomNav.includes(activeTool.value)) {
-      selectTool(roleConfig.defaultTool);
-    }
-  }
-
   function onHashChange() {
     const hash = window.location.hash.replace(/^#/, '');
-    if (hash && TOOLS[hash] && activeTool.value !== hash) {
-      activeTool.value = hash;
+    const toolId = hash.split('?')[0];
+    if (toolId && TOOLS[toolId] && activeTool.value !== toolId) {
+      activeTool.value = toolId;
     }
   }
 
@@ -58,13 +97,14 @@ export function useNavigation() {
 
   return {
     TOOLS,
-    ROLES,
-    currentRole,
-    currentRoleConfig,
+    MAX_BOTTOM_NAV,
     activeTool,
     isDrawerOpen,
+    bottomNavIds,
     bottomNavTools,
     selectTool,
-    setRole
+    toggleBottomNavTool,
+    isBottomNavPinned
   };
 }
+
